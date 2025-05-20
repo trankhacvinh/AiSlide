@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Các lĩnh vực của AI</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/style.css">
+    <style>
+      body {
+          margin: 0;
+          padding: 0;
+          font-family: 'Montserrat', sans-serif;
+          overflow: auto;
+      }
+      .slide {
+          width: 1280px;
+          min-height: 720px;
+          position: relative;
+          background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+          color: white;
+          overflow: hidden;
+      }
+      .gradient-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle at bottom right, rgba(64, 84, 178, 0.8), rgba(8, 34, 104, 0) 70%);
+      }
+      .grid-pattern {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image:
+              linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-size: 20px 20px;
+          z-index: 0;
+      }
+      .title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          background: linear-gradient(90deg, #ffffff, #e0e0e0);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 1.5rem;
+          position: relative;
+      }
+      .title::after {
+          content: "";
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 100px;
+          height: 4px;
+          background: linear-gradient(90deg, #4e54c8, #8f94fb);
+          border-radius: 2px;
+      }
+      .field-card {
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(5px);
+          border-radius: 15px;
+          padding: 20px;
+          transition: transform 0.3s, box-shadow 0.3s;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          height: 100%;
+          position: relative;
+          overflow: hidden;
+      }
+      .field-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+      }
+      .field-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: 10px;
+          color: white;
+      }
+      .ml-card {
+          border-left: 4px solid #4ed8f8;
+      }
+      .dl-card {
+          border-left: 4px solid #8a80ff;
+      }
+      .nlp-card {
+          border-left: 4px solid #ff6b8b;
+      }
+      .cv-card {
+          border-left: 4px solid #64e291;
+      }
+      .field-icon {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          font-size: 2rem;
+          opacity: 0.5;
+      }
+      .example-pill {
+          display: inline-block;
+          background: rgba(255, 255, 255, 0.15);
+          padding: 5px 12px;
+          border-radius: 20px;
+          font-size: 0.8rem;
+          margin-right: 5px;
+          margin-bottom: 5px;
+      }
+      .ml-pill {
+          border-left: 2px solid #4ed8f8;
+      }
+      .dl-pill {
+          border-left: 2px solid #8a80ff;
+      }
+      .nlp-pill {
+          border-left: 2px solid #ff6b8b;
+      }
+      .cv-pill {
+          border-left: 2px solid #64e291;
+      }
+      .relationship-diagram {
+          position: relative;
+          margin: 20px auto;
+          height: 80px;
+          width: 50%;
+      }
+      .relationship-box {
+          position: absolute;
+          text-align: center;
+          font-weight: 600;
+          padding: 5px 15px;
+          border-radius: 8px;
+          font-size: 0.9rem;
+          background: rgba(255, 255, 255, 0.2);
+      }
+      .ai-box {
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 100px;
+      }
+      .ml-box {
+          top: 40px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 150px;
+      }
+      .relationship-arrow {
+          position: absolute;
+          width: 2px;
+          height: 20px;
+          background: rgba(255, 255, 255, 0.5);
+          left: 50%;
+          top: 25px;
+      }
+      .sub-fields {
+          position: absolute;
+          display: flex;
+          justify-content: space-around;
+          width: 100%;
+          top: 80px;
+      }
+      .sub-field-box {
+          padding: 3px 10px;
+          border-radius: 5px;
+          font-size: 0.75rem;
+          background: rgba(255, 255, 255, 0.1);
+      }
+      .side-decoration {
+          position: absolute;
+          bottom: -50px;
+          right: -50px;
+          font-size: 300px;
+          opacity: 0.04;
+          transform: rotate(-15deg);
+      }
+      .p-custom{
+        padding: 1rem 0 3rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide flex flex-col items-start justify-start">
+      <!-- Background elements -->
+      <div class="grid-pattern"></div>
+      <div class="gradient-overlay"></div>
+      <i class="fas fa-project-diagram side-decoration"></i>
+
+      <!-- Main content -->
+      <div class="z-10 p-16 w-full h-full flex flex-col">
+        <h1 class="title">CÁC LĨNH VỰC CỦA AI</h1>
+
+        <!-- AI Fields Grid -->
+        <div class="grid grid-cols-2 gap-6 mt-2 mb-4">
+          <!-- Machine Learning Card -->
+          <div class="field-card ml-card">
+            <i class="fas fa-cogs field-icon" style="color: #4ed8f8;"></i>
+            <div class="field-title flex items-center">
+              <span class="mr-2">Học máy</span>
+              <span class="text-sm font-normal">(Machine Learning)</span>
+            </div>
+            <p class="text-sm opacity-80 mb-3">
+              Thuật toán cho phép máy tính học từ dữ liệu và cải thiện theo thời
+              gian mà không cần lập trình rõ ràng.
+            </p>
+
+            <div class="mb-2">
+              <div
+                class="text-xs font-semibold uppercase tracking-wide mb-1 text-blue-300"
+              >
+                Kỹ thuật phổ biến
+              </div>
+              <div class="flex flex-wrap">
+                <span class="example-pill ml-pill">Linear Regression</span>
+                <span class="example-pill ml-pill">Random Forest</span>
+                <span class="example-pill ml-pill">SVM</span>
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="text-xs font-semibold uppercase tracking-wide mb-1 text-blue-300"
+              >
+                Ứng dụng điển hình
+              </div>
+              <div class="flex flex-wrap">
+                <span class="example-pill ml-pill">Dự đoán giá</span>
+                <span class="example-pill ml-pill">Phân loại thư rác</span>
+                <span class="example-pill ml-pill">Recommender Systems</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Deep Learning Card -->
+          <div class="field-card dl-card">
+            <i
+              class="fas fa-network-wired field-icon"
+              style="color: #8a80ff;"
+            ></i>
+            <div class="field-title flex items-center">
+              <span class="mr-2">Học sâu</span>
+              <span class="text-sm font-normal">(Deep Learning)</span>
+            </div>
+            <p class="text-sm opacity-80 mb-3">
+              Tập con của ML sử dụng mạng neural nhiều lớp để học và xử lý dữ
+              liệu phức tạp, nhận dạng mẫu phức tạp.
+            </p>
+
+            <div class="mb-2">
+              <div
+                class="text-xs font-semibold uppercase tracking-wide mb-1 text-purple-300"
+              >
+                Kiến trúc nổi bật
+              </div>
+              <div class="flex flex-wrap">
+                <span class="example-pill dl-pill">CNN</span>
+                <span class="example-pill dl-pill">RNN</span>
+                <span class="example-pill dl-pill">Transformer</span>
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="text-xs font-semibold uppercase tracking-wide mb-1 text-purple-300"
+              >
+                Ứng dụng điển hình
+              </div>
+              <div class="flex flex-wrap">
+                <span class="example-pill dl-pill">Nhận dạng hình ảnh</span>
+                <span class="example-pill dl-pill">Nhận dạng giọng nói</span>
+                <span class="example-pill dl-pill">LLMs (GPT)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- NLP Card -->
+          <div class="field-card nlp-card">
+            <i class="fas fa-language field-icon" style="color: #ff6b8b;"></i>
+            <div class="field-title flex items-center">
+              <span class="mr-2">Xử lý ngôn ngữ tự nhiên</span>
+              <span class="text-sm font-normal">(NLP)</span>
+            </div>
+            <p class="text-sm opacity-80 mb-3">
+              Tập trung vào tương tác giữa máy tính và ngôn ngữ con người, phát
+              triển khả năng đọc, hiểu và tạo văn bản.
+            </p>
+
+            <div class="mb-2">
+              <div
+                class="text-xs font-semibold uppercase tracking-wide mb-1 text-pink-300"
+              >
+                Mô hình & kỹ thuật
+              </div>
+              <div class="flex flex-wrap">
+                <span class="example-pill nlp-pill">BERT</span>
+                <span class="example-pill nlp-pill">GPT</span>
+                <span class="example-pill nlp-pill">Word Embeddings</span>
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="text-xs font-semibold uppercase tracking-wide mb-1 text-pink-300"
+              >
+                Ứng dụng điển hình
+              </div>
+              <div class="flex flex-wrap">
+                <span class="example-pill nlp-pill">Dịch thuật</span>
+                <span class="example-pill nlp-pill">Chatbot</span>
+                <span class="example-pill nlp-pill">Phân tích cảm xúc</span>
+                <span class="example-pill nlp-pill">Tóm tắt văn bản</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Computer Vision Card -->
+          <div class="field-card cv-card">
+            <i class="fas fa-eye field-icon" style="color: #64e291;"></i>
+            <div class="field-title flex items-center">
+              <span class="mr-2">Thị giác máy tính</span>
+              <span class="text-sm font-normal">(Computer Vision)</span>
+            </div>
+            <p class="text-sm opacity-80 mb-3">
+              Lĩnh vực giúp máy tính "nhìn" và diễn giải dữ liệu hình ảnh và
+              video như cách con người nhìn thế giới.
+            </p>
+
+            <div class="mb-2">
+              <div
+                class="text-xs font-semibold uppercase tracking-wide mb-1 text-green-300"
+              >
+                Kỹ thuật quan trọng
+              </div>
+              <div class="flex flex-wrap">
+                <span class="example-pill cv-pill">Object Detection</span>
+                <span class="example-pill cv-pill">Image Segmentation</span>
+                <span class="example-pill cv-pill">GANs</span>
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="text-xs font-semibold uppercase tracking-wide mb-1 text-green-300"
+              >
+                Ứng dụng điển hình
+              </div>
+              <div class="flex flex-wrap">
+                <span class="example-pill cv-pill">Nhận diện khuôn mặt</span>
+                <span class="example-pill cv-pill">Xe tự lái</span>
+                <span class="example-pill cv-pill">Chẩn đoán y tế</span>
+                <span class="example-pill cv-pill">DALL-E, Midjourney</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Relationship Diagram -->
+        <div class="w-full mt-3">
+          <div class="bg-white bg-opacity-10 rounded-lg p-4 p-custom">
+            <div class="text-center text-sm font-semibold mb-3">
+              Mối quan hệ giữa các lĩnh vực
+            </div>
+            <div class="flex items-center justify-center">
+              <div class="h-24 w-80 relative">
+                <!-- AI Box -->
+                <div
+                  class="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 py-1 px-3 bg-blue-500 bg-opacity-20 border border-blue-400 rounded-lg text-center text-sm font-medium whitespace-nowrap"
+                >
+                  Trí tuệ nhân tạo<br />(AI)
+                </div>
+                <!-- Arrow down -->
+                <div
+                  class="absolute top-10 left-1/2 transform -translate-x-1/2 h-4 w-0.5 bg-white bg-opacity-50"
+                ></div>
+                <!-- ML Box -->
+                <div
+                  class="absolute top-14 left-1/2 transform -translate-x-1/2 w-40 py-1 px-3 bg-purple-500 bg-opacity-20 border border-purple-400 rounded-lg text-center text-sm font-medium"
+                >
+                  Học máy (ML)
+                </div>
+                <!-- Sub fields -->
+                <div class="absolute top-24 w-full flex justify-between px-2">
+                  <div
+                    class="py-1 px-3 bg-green-500 bg-opacity-20 border border-green-400 rounded-lg text-center text-xs"
+                  >
+                    Học sâu (DL)
+                  </div>
+                  <div
+                    class="py-1 px-3 bg-pink-500 bg-opacity-20 border border-pink-400 rounded-lg text-center text-xs"
+                  >
+                    NLP
+                  </div>
+                  <div
+                    class="py-1 px-3 bg-yellow-500 bg-opacity-20 border border-yellow-400 rounded-lg text-center text-xs"
+                  >
+                    Computer Vision
+                  </div>
+                </div>
+                <!-- Connector lines -->
+                <div
+                  class="absolute top-22 left-1/4 transform -translate-x-1/2 h-2 w-0.5 bg-white bg-opacity-50 rotate-45"
+                ></div>
+                <div
+                  class="absolute top-22 left-1/2 transform -translate-x-1/2 h-2 w-0.5 bg-white bg-opacity-50"
+                ></div>
+                <div
+                  class="absolute top-22 left-3/4 transform -translate-x-1/2 h-2 w-0.5 bg-white bg-opacity-50 -rotate-45"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Note -->
+        <div class="mt-auto text-sm opacity-70 flex items-center">
+          <i class="fas fa-info-circle mr-2"></i>
+          <span
+            >Các lĩnh vực AI thường chồng chéo và kết hợp với nhau trong các ứng
+            dụng thực tế.</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="slide-navigation">
+      <a href="page2.html" class="slide-navigation__btn">Prev</a>
+      <a href="page4.html" class="slide-navigation__btn">Next</a>
+    </div>
+  </body>
+</html>

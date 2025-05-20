@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI trong Doanh nghiệp: Ứng dụng & Triển khai</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/style.css">
+    <style>
+      body {
+          margin: 0;
+          padding: 0;
+          font-family: 'Montserrat', sans-serif;
+          overflow: auto;
+      }
+      .slide {
+          width: 1280px;
+          min-height: 720px;
+          position: relative;
+          background: linear-gradient(135deg, #0c1d3d, #1a3a63, #2c5364);
+          color: white;
+          overflow: hidden;
+      }
+      .gradient-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.2), rgba(8, 34, 104, 0) 70%);
+      }
+      .grid-pattern {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image:
+              linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-size: 20px 20px;
+          z-index: 0;
+      }
+      .title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          background: linear-gradient(90deg, #ffffff, #e0e0e0);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 1.5rem;
+          position: relative;
+      }
+      .title::after {
+          content: "";
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 100px;
+          height: 4px;
+          background: linear-gradient(90deg, #3b82f6, #60a5fa);
+          border-radius: 2px;
+      }
+      .card {
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(5px);
+          border-radius: 15px;
+          padding: 15px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          height: 100%;
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+      }
+      .card-title {
+          font-size: 1.1rem;
+          font-weight: 600;
+          margin-bottom: 10px;
+          color: white;
+          display: flex;
+          align-items: center;
+      }
+      .feature-item {
+          display: flex;
+          align-items: flex-start;
+          margin-bottom: 8px;
+      }
+      .feature-icon {
+          flex-shrink: 0;
+          width: 22px;
+          height: 22px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          margin-right: 8px;
+          margin-top: 2px;
+      }
+      .highlight {
+          background: rgba(255, 255, 255, 0.1);
+          padding: 2px 5px;
+          border-radius: 3px;
+          font-weight: 500;
+      }
+      .dept-card {
+          position: relative;
+          border-radius: 10px;
+          padding: 10px;
+          background: rgba(255, 255, 255, 0.08);
+          margin-bottom: 8px;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+      }
+      .dept-icon {
+          font-size: 1.2rem;
+          width: 24px;
+          margin-right: 10px;
+      }
+      .tech-card {
+          padding: 8px;
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.1);
+          margin-bottom: 8px;
+      }
+      .tech-title {
+          font-weight: 600;
+          font-size: 0.85rem;
+          margin-bottom: 5px;
+          display: flex;
+          align-items: center;
+      }
+      .tech-icon {
+          margin-right: 6px;
+      }
+      .strategy-step {
+          display: flex;
+          align-items: center;
+          background: rgba(255, 255, 255, 0.08);
+          padding: 5px 10px;
+          border-radius: 30px;
+          margin-bottom: 8px;
+      }
+      .step-number {
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 50%;
+          font-weight: 600;
+          font-size: 0.7rem;
+          margin-right: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide flex flex-col">
+      <!-- Background elements -->
+      <div class="grid-pattern"></div>
+      <div class="gradient-overlay"></div>
+
+      <!-- Main content -->
+      <div class="z-10 p-12 w-full h-full flex flex-col">
+        <h1 class="title">AI TRONG DOANH NGHIỆP: ỨNG DỤNG & TRIỂN KHAI</h1>
+
+        <div class="grid grid-cols-4 gap-4 flex-grow">
+          <!-- First column: No-code Automation -->
+          <div class="card">
+            <div class="card-title">
+              <i class="fas fa-robot mr-2 text-blue-400"></i>
+              Tự động hóa với No-code
+            </div>
+
+            <div class="text-xs space-y-2">
+              <p class="font-medium text-blue-300">n8n và Công cụ No-code</p>
+
+              <div class="feature-item">
+                <div class="feature-icon bg-blue-500 bg-opacity-20">
+                  <i class="fas fa-cogs text-blue-300 text-xs"></i>
+                </div>
+                <div class="text-xs">Workflow tự động giữa các ứng dụng</div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-icon bg-blue-500 bg-opacity-20">
+                  <i class="fas fa-plug text-blue-300 text-xs"></i>
+                </div>
+                <div class="text-xs">Tích hợp API không cần code</div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-icon bg-blue-500 bg-opacity-20">
+                  <i class="fas fa-tasks text-blue-300 text-xs"></i>
+                </div>
+                <div class="text-xs">Tự động hóa quy trình văn phòng</div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-icon bg-blue-500 bg-opacity-20">
+                  <i class="fas fa-sync-alt text-blue-300 text-xs"></i>
+                </div>
+                <div class="text-xs">Xử lý sự kiện theo lịch/trigger</div>
+              </div>
+
+              <p class="font-medium text-blue-300 mt-3">Công cụ phổ biến:</p>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="px-2 py-1 bg-white bg-opacity-10 rounded-md text-xs"
+                  >n8n</span
+                >
+                <span
+                  class="px-2 py-1 bg-white bg-opacity-10 rounded-md text-xs"
+                  >Zapier</span
+                >
+                <span
+                  class="px-2 py-1 bg-white bg-opacity-10 rounded-md text-xs"
+                  >Make</span
+                >
+                <span
+                  class="px-2 py-1 bg-white bg-opacity-10 rounded-md text-xs"
+                  >Power Automate</span
+                >
+                <span
+                  class="px-2 py-1 bg-white bg-opacity-10 rounded-md text-xs"
+                  >IFTTT</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Second column: Department Applications -->
+          <div class="card">
+            <div class="card-title">
+              <i class="fas fa-building mr-2 text-purple-400"></i>
+              Ứng dụng AI theo phòng ban
+            </div>
+
+            <div class="text-xs space-y-1">
+              <div class="dept-card">
+                <i class="fas fa-bullhorn dept-icon text-red-400"></i>
+                <div>
+                  <div class="font-medium text-red-300">Marketing</div>
+                  <div class="text-2xs">
+                    Tạo nội dung, phân tích xu hướng, video marketing, phân tích
+                    dữ liệu khách hàng
+                  </div>
+                </div>
+              </div>
+
+              <div class="dept-card">
+                <i class="fas fa-chart-line dept-icon text-green-400"></i>
+                <div>
+                  <div class="font-medium text-green-300">Bán hàng</div>
+                  <div class="text-2xs">
+                    Email marketing, chatbot tư vấn, dự báo doanh số, phân loại
+                    khách hàng tiềm năng
+                  </div>
+                </div>
+              </div>
+
+              <div class="dept-card">
+                <i class="fas fa-users dept-icon text-yellow-400"></i>
+                <div>
+                  <div class="font-medium text-yellow-300">Nhân sự</div>
+                  <div class="text-2xs">
+                    Sàng lọc CV, quy trình onboarding, khảo sát nhân viên, phân
+                    tích đánh giá
+                  </div>
+                </div>
+              </div>
+
+              <div class="dept-card">
+                <i class="fas fa-calculator dept-icon text-blue-400"></i>
+                <div>
+                  <div class="font-medium text-blue-300">Kế toán</div>
+                  <div class="text-2xs">
+                    Tự động hóa báo cáo, phân tích chi phí, dự báo ngân sách, xử
+                    lý hóa đơn
+                  </div>
+                </div>
+              </div>
+
+              <div class="dept-card">
+                <i class="fas fa-tools dept-icon text-purple-400"></i>
+                <div>
+                  <div class="font-medium text-purple-300">Vận hành</div>
+                  <div class="text-2xs">
+                    Tối ưu chuỗi cung ứng, dự báo nhu cầu, giảm thiểu rủi ro,
+                    kiểm soát chất lượng
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Third column: Advanced Knowledge -->
+          <div class="card">
+            <div class="card-title">
+              <i class="fas fa-brain mr-2 text-yellow-400"></i>
+              Kiến thức nâng cao
+            </div>
+
+            <div class="text-xs space-y-2">
+              <div class="tech-card">
+                <div class="tech-title text-green-300">
+                  <i class="fas fa-search tech-icon"></i>
+                  RAG (Retrieval-Augmented Generation)
+                </div>
+                <div class="text-2xs">
+                  <div class="mb-1">
+                    Kết hợp tìm kiếm và tạo sinh từ dữ liệu nội bộ:
+                  </div>
+                  <ul class="list-disc pl-4 space-y-1">
+                    <li>Tìm kiếm thông tin liên quan</li>
+                    <li>Bổ sung vào prompt AI</li>
+                    <li>Tạo ra phản hồi chính xác</li>
+                    <li>Giảm thiểu ảo giác (hallucination)</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="tech-card">
+                <div class="tech-title text-blue-300">
+                  <i class="fas fa-edit tech-icon"></i>
+                  Finetuning (Tinh chỉnh)
+                </div>
+                <div class="text-2xs">
+                  <div class="mb-1">Huấn luyện mô hình cho nhu cầu riêng:</div>
+                  <ul class="list-disc pl-4 space-y-1">
+                    <li>Điều chỉnh dựa vào dữ liệu đặc thù</li>
+                    <li>Cải thiện hiệu suất trong lĩnh vực cụ thể</li>
+                    <li>Tùy chỉnh phong cách, giọng điệu</li>
+                    <li>Giảm chi phí prompt engineering</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="tech-card">
+                <div class="tech-title text-purple-300">
+                  <i class="fas fa-user-robot tech-icon"></i>
+                  AI Agent
+                </div>
+                <div class="text-2xs">
+                  <div class="mb-1">
+                    Hệ thống AI tự hành động theo mục tiêu:
+                  </div>
+                  <ul class="list-disc pl-4 space-y-1">
+                    <li>Tự đưa ra quyết định</li>
+                    <li>Sử dụng công cụ và API</li>
+                    <li>Thực hiện lặp để đạt mục tiêu</li>
+                    <li>Tự động kiểm tra và điều chỉnh</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fourth column: Ethics & Implementation -->
+          <div class="card">
+            <div class="card-title">
+              <i class="fas fa-shield-alt mr-2 text-red-400"></i>
+              Đạo đức & Triển khai AI
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div>
+                <p class="font-medium text-red-300 mb-2">
+                  Nguyên tắc bảo mật & đạo đức:
+                </p>
+                <div class="grid grid-cols-2 gap-2">
+                  <div class="bg-white bg-opacity-10 p-2 rounded-lg">
+                    <i class="fas fa-user-shield text-red-300 mb-1"></i>
+                    <div class="text-2xs">Bảo vệ dữ liệu người dùng</div>
+                  </div>
+                  <div class="bg-white bg-opacity-10 p-2 rounded-lg">
+                    <i class="fas fa-balance-scale text-red-300 mb-1"></i>
+                    <div class="text-2xs">Minh bạch trong quy trình</div>
+                  </div>
+                  <div class="bg-white bg-opacity-10 p-2 rounded-lg">
+                    <i class="fas fa-eye-slash text-red-300 mb-1"></i>
+                    <div class="text-2xs">Kiểm soát thông tin nhạy cảm</div>
+                  </div>
+                  <div class="bg-white bg-opacity-10 p-2 rounded-lg">
+                    <i class="fas fa-gavel text-red-300 mb-1"></i>
+                    <div class="text-2xs">Tuân thủ luật pháp (GDPR)</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p class="font-medium text-green-300 mb-2">
+                  Chiến lược triển khai:
+                </p>
+                <div class="space-y-2">
+                  <div class="strategy-step">
+                    <div class="step-number">1</div>
+                    <div class="text-2xs">
+                      Bắt đầu từ tác vụ đơn giản, giá trị cao
+                    </div>
+                  </div>
+                  <div class="strategy-step">
+                    <div class="step-number">2</div>
+                    <div class="text-2xs">
+                      Đào tạo nhân viên về AI & cách sử dụng
+                    </div>
+                  </div>
+                  <div class="strategy-step">
+                    <div class="step-number">3</div>
+                    <div class="text-2xs">
+                      Giám sát kết quả & thu thập phản hồi
+                    </div>
+                  </div>
+                  <div class="strategy-step">
+                    <div class="step-number">4</div>
+                    <div class="text-2xs">
+                      Tăng dần phạm vi & mức độ phức tạp
+                    </div>
+                  </div>
+                  <div class="strategy-step">
+                    <div class="step-number">5</div>
+                    <div class="text-2xs">
+                      Xây dựng quy trình đánh giá & cập nhật
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white bg-opacity-5 p-2 rounded-lg">
+                <p class="font-medium text-blue-300 mb-1">
+                  Lời khuyên triển khai:
+                </p>
+                <div class="text-2xs space-y-1">
+                  <div>
+                    <i class="fas fa-check text-blue-300 mr-1"></i> Ưu tiên
+                    <span class="highlight">giá trị doanh nghiệp</span> hơn công
+                    nghệ
+                  </div>
+                  <div>
+                    <i class="fas fa-check text-blue-300 mr-1"></i> Xây dựng
+                    <span class="highlight">hệ sinh thái AI</span> thay vì giải
+                    pháp riêng lẻ
+                  </div>
+                  <div>
+                    <i class="fas fa-check text-blue-300 mr-1"></i>
+                    <span class="highlight">Human-in-the-loop</span>: Kết hợp AI
+                    và con người
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom quote -->
+        <div class="mt-4 flex items-center justify-center text-xs opacity-80">
+          <i class="fas fa-quote-left text-blue-400 mr-2"></i>
+          <span class="italic"
+            >"Tương lai thuộc về những tổ chức không chỉ triển khai AI, mà còn
+            biết cách kết hợp AI với con người để tạo ra giá trị mới"</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="slide-navigation">
+      <a href="page8.html" class="slide-navigation__btn">Prev</a>
+      <button class="slide-navigation__btn" disabled style="opacity:0.5;cursor:not-allowed;">Next</button>
+    </div>
+  </body>
+</html>

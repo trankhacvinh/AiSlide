@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI và các loại AI</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/style.css">
+    <style>
+      body {
+          margin: 0;
+          padding: 0;
+          font-family: 'Montserrat', sans-serif;
+          overflow: auto;
+      }
+      .slide {
+          width: 1280px;
+          min-height: 720px;
+          position: relative;
+          background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+          color: white;
+          overflow: hidden;
+      }
+      .gradient-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle at bottom right, rgba(64, 84, 178, 0.8), rgba(8, 34, 104, 0) 70%);
+      }
+      .grid-pattern {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image:
+              linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-size: 20px 20px;
+          z-index: 0;
+      }
+      .title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          background: linear-gradient(90deg, #ffffff, #e0e0e0);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 2rem;
+          position: relative;
+      }
+      .title::after {
+          content: "";
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 100px;
+          height: 4px;
+          background: linear-gradient(90deg, #4e54c8, #8f94fb);
+          border-radius: 2px;
+      }
+      .ai-card {
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(5px);
+          border-radius: 15px;
+          padding: 25px;
+          transition: transform 0.3s, box-shadow 0.3s;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          height: 100%;
+          position: relative;
+          overflow: hidden;
+      }
+      .ai-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+      }
+      .ai-type {
+          font-size: 1.8rem;
+          font-weight: 700;
+          margin-bottom: 10px;
+          color: white;
+      }
+      .ani {
+          border-left: 4px solid #4ed8f8;
+      }
+      .agi {
+          border-left: 4px solid #8a80ff;
+      }
+      .asi {
+          border-left: 4px solid #ff6b8b;
+      }
+      .ai-icon {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          font-size: 2.5rem;
+          opacity: 0.5;
+      }
+      .development-line {
+          height: 4px;
+          background: linear-gradient(90deg, #4ed8f8, #8a80ff, #ff6b8b);
+          margin: 30px 0;
+          border-radius: 2px;
+          position: relative;
+      }
+      .development-dot {
+          position: absolute;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 1;
+      }
+      .dot-ani {
+          left: 15%;
+          background-color: #4ed8f8;
+          box-shadow: 0 0 15px #4ed8f8;
+      }
+      .dot-agi {
+          left: 50%;
+          background-color: #8a80ff;
+          box-shadow: 0 0 15px #8a80ff;
+      }
+      .dot-asi {
+          left: 85%;
+          background-color: #ff6b8b;
+          box-shadow: 0 0 15px #ff6b8b;
+      }
+      .dev-label {
+          position: absolute;
+          font-size: 0.75rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+      }
+      .label-today {
+          left: 15%;
+          bottom: -25px;
+          transform: translateX(-50%);
+      }
+      .label-near {
+          left: 50%;
+          bottom: -25px;
+          transform: translateX(-50%);
+      }
+      .label-distant {
+          left: 85%;
+          bottom: -25px;
+          transform: translateX(-50%);
+      }
+      .comparison-table {
+          width: 100%;
+          border-collapse: separate;
+          border-spacing: 0 8px;
+      }
+      .comparison-table tr {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 8px;
+      }
+      .comparison-table td {
+          padding: 10px 15px;
+      }
+      .comparison-table td:first-child {
+          font-weight: 600;
+          width: 150px;
+          border-radius: 8px 0 0 8px;
+      }
+      .comparison-table td:last-child {
+          border-radius: 0 8px 8px 0;
+      }
+      .capability-icon {
+          margin-right: 5px;
+          color: rgba(255, 255, 255, 0.7);
+      }
+      .side-decoration {
+          position: absolute;
+          bottom: -50px;
+          right: -50px;
+          font-size: 300px;
+          opacity: 0.04;
+          transform: rotate(-15deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide flex flex-col items-start justify-start">
+      <!-- Background elements -->
+      <div class="grid-pattern"></div>
+      <div class="gradient-overlay"></div>
+      <i class="fas fa-brain side-decoration"></i>
+
+      <!-- Main content -->
+      <div class="z-10 p-16 w-full h-full flex flex-col">
+        <h1 class="title">AI VÀ CÁC LOẠI AI</h1>
+
+        <!-- AI Types Cards -->
+        <div class="grid grid-cols-3 gap-6 mt-4 mb-8">
+          <!-- ANI Card -->
+          <div class="ai-card ani">
+            <i class="fas fa-tasks ai-icon"></i>
+            <div class="ai-type">ANI</div>
+            <div class="text-lg font-medium mb-2">
+              Artificial Narrow Intelligence
+            </div>
+            <div class="text-sm opacity-80 mb-4">
+              Trí tuệ nhân tạo chuyên biệt
+            </div>
+            <ul class="text-sm space-y-2">
+              <li>
+                <i class="fas fa-check-circle text-green-400 mr-2"></i>Chuyên
+                một nhiệm vụ cụ thể
+              </li>
+              <li>
+                <i class="fas fa-check-circle text-green-400 mr-2"></i>Hiện đang
+                được sử dụng rộng rãi
+              </li>
+              <li>
+                <i class="fas fa-check-circle text-green-400 mr-2"></i>Ví dụ:
+                Chatbot, nhận diện hình ảnh, dịch thuật
+              </li>
+            </ul>
+          </div>
+
+          <!-- AGI Card -->
+          <div class="ai-card agi">
+            <i class="fas fa-user-cog ai-icon"></i>
+            <div class="ai-type">AGI</div>
+            <div class="text-lg font-medium mb-2">
+              Artificial General Intelligence
+            </div>
+            <div class="text-sm opacity-80 mb-4">
+              Trí tuệ nhân tạo tổng quát
+            </div>
+            <ul class="text-sm space-y-2">
+              <li>
+                <i class="fas fa-hourglass-half text-yellow-400 mr-2"></i>Suy
+                nghĩ, hiểu và học như con người
+              </li>
+              <li>
+                <i class="fas fa-hourglass-half text-yellow-400 mr-2"></i>Giải
+                quyết mọi vấn đề trí tuệ
+              </li>
+              <li>
+                <i class="fas fa-hourglass-half text-yellow-400 mr-2"></i>Đang
+                trong quá trình nghiên cứu
+              </li>
+            </ul>
+          </div>
+
+          <!-- ASI Card -->
+          <div class="ai-card asi">
+            <i class="fas fa-rocket ai-icon"></i>
+            <div class="ai-type">ASI</div>
+            <div class="text-lg font-medium mb-2">
+              Artificial Super Intelligence
+            </div>
+            <div class="text-sm opacity-80 mb-4">Siêu trí tuệ nhân tạo</div>
+            <ul class="text-sm space-y-2">
+              <li>
+                <i class="fas fa-question-circle text-red-400 mr-2"></i>Vượt
+                trội trí tuệ con người
+              </li>
+              <li>
+                <i class="fas fa-question-circle text-red-400 mr-2"></i>Khả năng
+                không thể dự đoán
+              </li>
+              <li>
+                <i class="fas fa-question-circle text-red-400 mr-2"></i>Còn là
+                khái niệm lý thuyết
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Development Timeline -->
+        <div class="relative w-full my-4 px-6">
+          <div class="development-line">
+            <div class="development-dot dot-ani"></div>
+            <div class="development-dot dot-agi"></div>
+            <div class="development-dot dot-asi"></div>
+
+            <div class="dev-label label-today">Hiện tại</div>
+            <div class="dev-label label-near">Tương lai gần</div>
+            <div class="dev-label label-distant">Tương lai xa</div>
+          </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <table class="comparison-table mt-6">
+          <tr>
+            <td>Khả năng</td>
+            <td>
+              <i class="fas fa-cog capability-icon"></i> Chỉ thực hiện nhiệm vụ
+              được thiết kế
+            </td>
+            <td>
+              <i class="fas fa-lightbulb capability-icon"></i> Học và giải quyết
+              vấn đề đa dạng
+            </td>
+            <td>
+              <i class="fas fa-star capability-icon"></i> Phát triển khả năng
+              mới và không thể dự đoán
+            </td>
+          </tr>
+          <tr>
+            <td>Ứng dụng</td>
+            <td>
+              <i class="fas fa-check capability-icon"></i> Sử dụng rộng rãi hiện
+              nay
+            </td>
+            <td>
+              <i class="fas fa-hourglass-half capability-icon"></i> Đang phát
+              triển
+            </td>
+            <td>
+              <i class="fas fa-question capability-icon"></i> Dự đoán lý thuyết
+            </td>
+          </tr>
+        </table>
+
+        <!-- Bottom Note -->
+        <div class="mt-auto text-sm opacity-70 flex items-center">
+          <i class="fas fa-info-circle mr-2"></i>
+          <span
+            >Hiện nay, tất cả AI đang sử dụng đều thuộc dạng ANI. ChatGPT và các
+            LLM đều là ANI, dù có khả năng đa dạng.</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="slide-navigation">
+      <a href="page1.html" class="slide-navigation__btn">Prev</a>
+      <a href="page3.html" class="slide-navigation__btn">Next</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ứng dụng AI trong viết, dịch, sáng tạo nội dung</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/style.css">
+    <style>
+      body {
+          margin: 0;
+          padding: 0;
+          font-family: 'Montserrat', sans-serif;
+          overflow: auto;
+      }
+      .slide {
+          width: 1280px;
+          min-height: 720px;
+          position: relative;
+          background: linear-gradient(135deg, #0c1d3d, #1a3a63, #2c5364);
+          color: white;
+          overflow: hidden;
+      }
+      .gradient-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.2), rgba(8, 34, 104, 0) 70%);
+      }
+      .grid-pattern {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image:
+              linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-size: 20px 20px;
+          z-index: 0;
+      }
+      .title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          background: linear-gradient(90deg, #ffffff, #e0e0e0);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 1.5rem;
+          position: relative;
+      }
+      .title::after {
+          content: "";
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 100px;
+          height: 4px;
+          background: linear-gradient(90deg, #3b82f6, #60a5fa);
+          border-radius: 2px;
+      }
+      .card {
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(5px);
+          border-radius: 15px;
+          padding: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          height: 100%;
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+      }
+      .feature-card {
+          background: rgba(255, 255, 255, 0.08);
+          border-radius: 12px;
+          padding: 15px;
+          transition: all 0.3s;
+          border-left: 3px solid transparent;
+      }
+      .feature-card:hover {
+          transform: translateY(-3px);
+          background: rgba(255, 255, 255, 0.12);
+      }
+      .card-title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin-bottom: 12px;
+          color: white;
+          display: flex;
+          align-items: center;
+      }
+      .tool-pill {
+          display: inline-flex;
+          align-items: center;
+          padding: 5px 12px;
+          border-radius: 20px;
+          margin: 0 5px 8px 0;
+          font-size: 0.85rem;
+          font-weight: 500;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          transition: all 0.3s;
+      }
+      .tool-pill:hover {
+          background: rgba(255, 255, 255, 0.2);
+          transform: scale(1.05);
+      }
+      .floating-element {
+          position: absolute;
+          z-index: 0;
+          opacity: 0.1;
+          pointer-events: none;
+      }
+      .floating-pencil {
+          top: 120px;
+          right: 120px;
+          font-size: 4rem;
+          transform: rotate(45deg);
+      }
+      .floating-code {
+          bottom: 100px;
+          left: 80px;
+          font-size: 5rem;
+      }
+      .benefit-bar {
+          height: 10px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 5px;
+          margin-top: 5px;
+          overflow: hidden;
+          position: relative;
+      }
+      .benefit-fill {
+          height: 100%;
+          border-radius: 5px;
+          position: absolute;
+          left: 0;
+          top: 0;
+          transition: width 1s ease-in-out;
+      }
+      .example-box {
+          background: rgba(0, 0, 0, 0.2);
+          border-radius: 8px;
+          padding: 10px;
+          position: relative;
+          font-size: 0.9rem;
+          border-left: 3px solid;
+          margin-bottom: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide flex flex-col items-start justify-start">
+      <!-- Background elements -->
+      <div class="grid-pattern"></div>
+      <div class="gradient-overlay"></div>
+      <i class="fas fa-pencil-alt floating-element floating-pencil"></i>
+      <i class="fas fa-code floating-element floating-code"></i>
+
+      <!-- Main content -->
+      <div class="z-10 p-16 w-full h-full flex flex-col">
+        <h1 class="title">ỨNG DỤNG AI TRONG VIẾT, DỊCH VÀ SÁNG TẠO NỘI DUNG</h1>
+
+        <!-- Main content grid -->
+        <div class="grid grid-cols-2 gap-6 mt-2">
+          <!-- Left Column -->
+          <div class="space-y-6">
+            <!-- Writing and Translation -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-pen-fancy mr-2 text-blue-400"></i>
+                Viết và Dịch thuật
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <!-- Writing Applications -->
+                <div class="feature-card" style="border-left-color: #3b82f6;">
+                  <div class="text-sm font-semibold mb-2 text-blue-300">
+                    Viết và biên tập
+                  </div>
+                  <ul class="text-xs space-y-2">
+                    <li>
+                      <i class="fas fa-check-circle text-blue-400 mr-1"></i>
+                      Soạn thảo email, báo cáo
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-blue-400 mr-1"></i> Tóm
+                      tắt văn bản dài
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-blue-400 mr-1"></i> Sửa
+                      lỗi ngữ pháp, chính tả
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-blue-400 mr-1"></i> Cải
+                      thiện văn phong, ngôn ngữ
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-blue-400 mr-1"></i> Tạo
+                      bản nháp cho bài viết
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Translation Applications -->
+                <div class="feature-card" style="border-left-color: #6366f1;">
+                  <div class="text-sm font-semibold mb-2 text-indigo-300">
+                    Dịch thuật
+                  </div>
+                  <ul class="text-xs space-y-2">
+                    <li>
+                      <i class="fas fa-check-circle text-indigo-400 mr-1"></i>
+                      Dịch đa ngôn ngữ tức thì
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-indigo-400 mr-1"></i>
+                      Đảm bảo ngữ cảnh văn hóa
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-indigo-400 mr-1"></i>
+                      Chuyển đổi phong cách ngôn ngữ
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-indigo-400 mr-1"></i>
+                      Biên dịch tài liệu chuyên ngành
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-indigo-400 mr-1"></i>
+                      Dịch song song nhiều tài liệu
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Writing Example -->
+              <div class="mt-4">
+                <div class="text-sm font-semibold mb-2 text-blue-300">
+                  Ví dụ ứng dụng
+                </div>
+                <div class="example-box" style="border-left-color: #3b82f6;">
+                  <div class="text-xs font-semibold">
+                    Prompt:
+                    <span class="font-normal"
+                      >Tóm tắt báo cáo tài chính Q3 này trong 100 từ</span
+                    >
+                  </div>
+                  <div class="mt-2 text-xs">
+                    <span class="font-bold text-blue-300">Output:</span>
+                    <span class="opacity-80"
+                      >Báo cáo tài chính Q3 ghi nhận doanh thu 15.2 tỷ (+12%
+                      YoY), EBITDA 3.8 tỷ (+8%). Lợi nhuận ròng tăng 5% đạt 2.1
+                      tỷ. Phân khúc công nghệ tăng trưởng mạnh nhất (+18%), tiếp
+                      theo là dịch vụ (+10%). Chi phí vận hành giảm 3% nhờ tự
+                      động hóa. Dòng tiền tự do đạt 1.6 tỷ, tăng 200 triệu so
+                      với cùng kỳ. Dự báo Q4 duy trì đà tăng với doanh thu dự
+                      kiến đạt 16.5 tỷ. Rủi ro chính: biến động tỷ giá và gián
+                      đoạn chuỗi cung ứng.</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Popular Tools -->
+              <div class="mt-4">
+                <div class="text-sm font-semibold mb-2">Công cụ phổ biến</div>
+                <div class="flex flex-wrap">
+                  <div class="tool-pill">
+                    <i class="fas fa-robot text-green-400 mr-1"></i> ChatGPT
+                  </div>
+                  <div class="tool-pill">
+                    <i class="fas fa-language text-blue-400 mr-1"></i> DeepL
+                  </div>
+                  <div class="tool-pill">
+                    <i class="fas fa-pen text-purple-400 mr-1"></i> Grammarly
+                  </div>
+                  <div class="tool-pill">
+                    <i class="fas fa-file-alt text-yellow-400 mr-1"></i> Jasper
+                  </div>
+                  <div class="tool-pill">
+                    <i class="fas fa-brain text-pink-400 mr-1"></i> Claude
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Content Creation -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-palette mr-2 text-pink-400"></i>
+                Sáng tạo nội dung
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <!-- Image Generation -->
+                <div class="feature-card" style="border-left-color: #ec4899;">
+                  <div class="text-sm font-semibold mb-2 text-pink-300">
+                    Tạo hình ảnh
+                  </div>
+                  <ul class="text-xs space-y-2">
+                    <li>
+                      <i class="fas fa-check-circle text-pink-400 mr-1"></i> Tạo
+                      ảnh minh họa
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-pink-400 mr-1"></i>
+                      Thiết kế banner, poster
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-pink-400 mr-1"></i>
+                      Phác thảo ý tưởng
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-pink-400 mr-1"></i>
+                      Chỉnh sửa, biến đổi ảnh
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-pink-400 mr-1"></i> Tạo
+                      hình ảnh theo phong cách
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Audio/Video Generation -->
+                <div class="feature-card" style="border-left-color: #f59e0b;">
+                  <div class="text-sm font-semibold mb-2 text-amber-300">
+                    Tạo âm thanh/video
+                  </div>
+                  <ul class="text-xs space-y-2">
+                    <li>
+                      <i class="fas fa-check-circle text-amber-400 mr-1"></i>
+                      Tổng hợp giọng nói
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-amber-400 mr-1"></i>
+                      Tạo nhạc nền, hiệu ứng
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-amber-400 mr-1"></i>
+                      Phụ đề tự động
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-amber-400 mr-1"></i>
+                      Biên tập video tự động
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-amber-400 mr-1"></i>
+                      Tạo hoạt ảnh, hiệu ứng
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Content Creation Tools -->
+              <div class="mt-4">
+                <div class="text-sm font-semibold mb-2">
+                  Công cụ sáng tạo nội dung
+                </div>
+                <div class="flex flex-wrap">
+                  <div class="tool-pill">
+                    <i class="fas fa-image text-purple-400 mr-1"></i> Midjourney
+                  </div>
+                  <div class="tool-pill">
+                    <i class="fas fa-paint-brush text-orange-400 mr-1"></i>
+                    DALL-E
+                  </div>
+                  <div class="tool-pill">
+                    <i class="fas fa-film text-red-400 mr-1"></i> Runway ML
+                  </div>
+                  <div class="tool-pill">
+                    <i class="fas fa-volume-up text-blue-400 mr-1"></i>
+                    ElevenLabs
+                  </div>
+                  <div class="tool-pill">
+                    <i class="fas fa-music text-green-400 mr-1"></i> Suno AI
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="space-y-6">
+            <!-- Programming Applications -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-code mr-2 text-green-400"></i>
+                Lập trình với AI
+              </div>
+
+              <div class="grid grid-cols-1 gap-4">
+                <!-- Programming Features -->
+                <div class="feature-card" style="border-left-color: #10b981;">
+                  <div class="text-sm font-semibold mb-2 text-green-300">
+                    Ứng dụng trong lập trình
+                  </div>
+                  <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                    <div>
+                      <i class="fas fa-check-circle text-green-400 mr-1"></i>
+                      Tạo code theo yêu cầu
+                    </div>
+                    <div>
+                      <i class="fas fa-check-circle text-green-400 mr-1"></i>
+                      Giải thích code phức tạp
+                    </div>
+                    <div>
+                      <i class="fas fa-check-circle text-green-400 mr-1"></i>
+                      Tối ưu hóa thuật toán
+                    </div>
+                    <div>
+                      <i class="fas fa-check-circle text-green-400 mr-1"></i>
+                      Debug và tìm lỗi
+                    </div>
+                    <div>
+                      <i class="fas fa-check-circle text-green-400 mr-1"></i> Đề
+                      xuất cải tiến code
+                    </div>
+                    <div>
+                      <i class="fas fa-check-circle text-green-400 mr-1"></i>
+                      Tạo tài liệu, chú thích
+                    </div>
+                    <div>
+                      <i class="fas fa-check-circle text-green-400 mr-1"></i>
+                      Chuyển đổi giữa ngôn ngữ
+                    </div>
+                    <div>
+                      <i class="fas fa-check-circle text-green-400 mr-1"></i> Tư
+                      vấn kiến trúc hệ thống
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Programming Example -->
+              <div class="mt-4">
+                <div class="text-sm font-semibold mb-2 text-green-300">
+                  Ví dụ ứng dụng
+                </div>
+                <div class="example-box" style="border-left-color: #10b981;">
+                  <div class="text-xs font-semibold">
+                    Prompt:
+                    <span class="font-normal"
+                      >Viết một hàm Python để tìm số Fibonacci thứ n sử dụng đệ
+                      quy có nhớ</span
+                    >
+                  </div>
+                  <div
+                    class="mt-2 text-xs bg-gray-900 bg-opacity-50 p-2 rounded font-mono"
+                  >
+                    <pre class="opacity-90">
+def fibonacci(n, memo={}):
+    if n in memo:
+        return memo[n]
+    if n <= 2:
+        return 1
+    memo[n] = fibonacci(n-1, memo) + fibonacci(n-2, memo)
+    return memo[n]
+
+# Sử dụng hàm
+print(fibonacci(10))  # Output: 55</pre
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Programming Tools -->
+              <div class="mt-4">
+                <div class="text-sm font-semibold mb-2">
+                  Công cụ hỗ trợ lập trình
+                </div>
+                <div class="flex flex-wrap">
+                  <div class="tool-pill">
+                    <i class="fas fa-terminal text-gray-400 mr-1"></i> GitHub
+                    Copilot
+                  </div>
+                  <div class="tool-pill">
+                    <i class="fas fa-robot text-green-400 mr-1"></i> ChatGPT
+                  </div>
+                  <div class="tool-pill">
+                    <i class="fas fa-code-branch text-purple-400 mr-1"></i>
+                    Tabnine
+                  </div>
+                  <div class="tool-pill">
+                    <i class="fas fa-keyboard text-blue-400 mr-1"></i> Codeium
+                  </div>
+                  <div class="tool-pill">
+                    <i class="fas fa-search text-yellow-400 mr-1"></i> Replit
+                    Ghostwriter
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Benefits & Statistics -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-chart-line mr-2 text-yellow-400"></i>
+                Lợi ích và tác động
+              </div>
+
+              <!-- Benefits -->
+              <div class="grid grid-cols-1 gap-3 mb-4">
+                <!-- Productivity -->
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span class="font-medium">Tăng năng suất</span>
+                    <span class="text-green-300">+70%</span>
+                  </div>
+                  <div class="benefit-bar">
+                    <div
+                      class="benefit-fill bg-green-500"
+                      style="width: 70%;"
+                    ></div>
+                  </div>
+                </div>
+
+                <!-- Time Saving -->
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span class="font-medium">Tiết kiệm thời gian</span>
+                    <span class="text-blue-300">+65%</span>
+                  </div>
+                  <div class="benefit-bar">
+                    <div
+                      class="benefit-fill bg-blue-500"
+                      style="width: 65%;"
+                    ></div>
+                  </div>
+                </div>
+
+                <!-- Creativity -->
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span class="font-medium">Tăng sáng tạo</span>
+                    <span class="text-purple-300">+55%</span>
+                  </div>
+                  <div class="benefit-bar">
+                    <div
+                      class="benefit-fill bg-purple-500"
+                      style="width: 55%;"
+                    ></div>
+                  </div>
+                </div>
+
+                <!-- Cost Reduction -->
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span class="font-medium">Giảm chi phí</span>
+                    <span class="text-pink-300">+40%</span>
+                  </div>
+                  <div class="benefit-bar">
+                    <div
+                      class="benefit-fill bg-pink-500"
+                      style="width: 40%;"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Key Facts -->
+              <div class="bg-white bg-opacity-10 rounded-lg p-3">
+                <div class="text-sm font-semibold mb-2">
+                  Hiện trạng & tương lai
+                </div>
+                <div class="grid grid-cols-2 gap-4 text-xs">
+                  <div class="flex items-start">
+                    <i class="fas fa-clock text-amber-400 mt-1 mr-2"></i>
+                    <span
+                      >Người viết nội dung tiết kiệm trung bình 3-6 giờ/tuần nhờ
+                      AI</span
+                    >
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-lightbulb text-amber-400 mt-1 mr-2"></i>
+                    <span
+                      >78% nhà phát triển sử dụng AI để tăng tốc quy trình
+                      code</span
+                    >
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-chart-pie text-amber-400 mt-1 mr-2"></i>
+                    <span
+                      >Thị trường Generative AI dự kiến đạt 110 tỷ USD vào
+                      2030</span
+                    >
+                  </div>
+                  <div class="flex items-start">
+                    <i
+                      class="fas fa-exclamation-circle text-amber-400 mt-1 mr-2"
+                    ></i>
+                    <span
+                      >65% doanh nghiệp đang tích hợp AI vào quy trình sáng tạo
+                      nội dung</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Note -->
+        <div class="mt-auto flex items-center text-sm opacity-80">
+          <div class="mr-2">
+            <i class="fas fa-lightbulb text-yellow-400 mr-1"></i>
+            <span class="font-semibold">Lưu ý quan trọng:</span>
+          </div>
+          <span
+            >AI tạo ra nội dung cần được con người kiểm tra để đảm bảo chất
+            lượng, độ chính xác và tránh các vấn đề về bản quyền</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-navigation">
+      <a href="page5.html" class="slide-navigation__btn">Prev</a>
+      <a href="page7.html" class="slide-navigation__btn">Next</a>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          // Animation for benefit bars
+          const bars = document.querySelectorAll('.benefit-fill');
+          setTimeout(() => {
+              bars.forEach(bar => {
+                  const width = bar.style.width;
+                  bar.style.width = '0';
+                  setTimeout(() => {
+                      bar.style.width = width;
+                  }, 100);
+              });
+          }, 300);
+      });
+    </script>
+  </body>
+</html>

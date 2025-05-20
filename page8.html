@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prompt Engineering</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/style.css">
+    <style>
+      body {
+          margin: 0;
+          padding: 0;
+          font-family: 'Montserrat', sans-serif;
+          overflow: auto;
+      }
+      .slide {
+          width: 1280px;
+          min-height: 720px;
+          position: relative;
+          background: linear-gradient(135deg, #0c1d3d, #1a3a63, #2c5364);
+          color: white;
+          overflow: hidden;
+      }
+      .gradient-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.2), rgba(8, 34, 104, 0) 70%);
+      }
+      .grid-pattern {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image:
+              linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-size: 20px 20px;
+          z-index: 0;
+      }
+      .title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          background: linear-gradient(90deg, #ffffff, #e0e0e0);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 1.5rem;
+          position: relative;
+      }
+      .title::after {
+          content: "";
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 100px;
+          height: 4px;
+          background: linear-gradient(90deg, #3b82f6, #60a5fa);
+          border-radius: 2px;
+      }
+      .card {
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(5px);
+          border-radius: 15px;
+          padding: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          height: 100%;
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+      }
+      .card-title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin-bottom: 12px;
+          color: white;
+          display: flex;
+          align-items: center;
+      }
+      .feature-card {
+          background: rgba(255, 255, 255, 0.08);
+          border-radius: 12px;
+          padding: 15px;
+          transition: all 0.3s;
+          border-left: 3px solid transparent;
+          height: 100%;
+      }
+      .feature-card:hover {
+          transform: translateY(-3px);
+          background: rgba(255, 255, 255, 0.12);
+      }
+      .floating-element {
+          position: absolute;
+          z-index: 0;
+          opacity: 0.1;
+          pointer-events: none;
+      }
+      .floating-keyboard {
+          top: 50px;
+          right: 50px;
+          font-size: 6rem;
+          transform: rotate(5deg);
+      }
+      .floating-bulb {
+          bottom: 70px;
+          left: 50px;
+          font-size: 5rem;
+      }
+      .prompt-example {
+          background: rgba(0, 0, 0, 0.2);
+          border-radius: 10px;
+          padding: 12px;
+          margin-bottom: 10px;
+          border-left: 3px solid;
+          font-family: monospace;
+          font-size: 0.85rem;
+      }
+      .tag {
+          display: inline-block;
+          padding: 4px 8px;
+          border-radius: 50px;
+          font-size: 0.7rem;
+          font-weight: 600;
+          margin-right: 5px;
+          margin-bottom: 5px;
+      }
+      .tip-item {
+          display: flex;
+          align-items: flex-start;
+          margin-bottom: 10px;
+      }
+      .tip-icon {
+          flex-shrink: 0;
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          margin-right: 10px;
+          margin-top: 2px;
+      }
+      .technique-card {
+          position: relative;
+          border-radius: 10px;
+          padding: 12px;
+          background: rgba(255, 255, 255, 0.08);
+          border-left: 3px solid;
+          margin-bottom: 10px;
+          overflow: hidden;
+      }
+      .technique-icon {
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          font-size: 2rem;
+          opacity: 0.15;
+      }
+      .highlight {
+          background: rgba(255, 255, 255, 0.1);
+          padding: 2px 5px;
+          border-radius: 3px;
+          font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide flex flex-col">
+      <!-- Background elements -->
+      <div class="grid-pattern"></div>
+      <div class="gradient-overlay"></div>
+      <i class="fas fa-keyboard floating-element floating-keyboard"></i>
+      <i class="fas fa-lightbulb floating-element floating-bulb"></i>
+
+      <!-- Main content -->
+      <div class="z-10 p-16 w-full h-full flex flex-col">
+        <h1 class="title">PROMPT ENGINEERING</h1>
+
+        <div class="grid grid-cols-2 gap-6 flex-grow">
+          <!-- Left column -->
+          <div class="space-y-6">
+            <!-- Prompt Engineering Intro -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-magic mr-2 text-purple-400"></i>
+                Kỹ thuật viết prompt hiệu quả
+              </div>
+
+              <div class="space-y-4 text-sm">
+                <p>
+                  Prompt Engineering là nghệ thuật thiết kế đầu vào (prompt) để
+                  hướng dẫn AI tạo ra đầu ra mong muốn, giúp tận dụng tối đa khả
+                  năng của mô hình.
+                </p>
+
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                  <div class="bg-white bg-opacity-10 p-3 rounded-lg">
+                    <div class="text-purple-300 font-semibold mb-2">
+                      Prompt cơ bản
+                    </div>
+                    <p class="text-xs">
+                      Câu lệnh đơn giản, trực tiếp yêu cầu AI thực hiện một
+                      nhiệm vụ cụ thể.
+                    </p>
+                  </div>
+                  <div class="bg-white bg-opacity-10 p-3 rounded-lg">
+                    <div class="text-blue-300 font-semibold mb-2">
+                      Prompt nâng cao
+                    </div>
+                    <p class="text-xs">
+                      Kết hợp nhiều yếu tố, bối cảnh, ràng buộc để hướng dẫn AI
+                      tạo ra kết quả phức tạp hơn.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="bg-white bg-opacity-5 p-3 rounded-lg">
+                  <div class="font-semibold text-green-300 mb-2">
+                    Cấu trúc prompt hiệu quả
+                  </div>
+                  <ol class="list-decimal pl-5 text-xs space-y-1">
+                    <li>
+                      <span class="text-yellow-300 font-medium">Bối cảnh</span>:
+                      Cung cấp ngữ cảnh và thông tin nền
+                    </li>
+                    <li>
+                      <span class="text-yellow-300 font-medium">Hướng dẫn</span
+                      >: Mô tả rõ nhiệm vụ cần thực hiện
+                    </li>
+                    <li>
+                      <span class="text-yellow-300 font-medium">Đầu vào</span>:
+                      Cung cấp dữ liệu cần xử lý (nếu có)
+                    </li>
+                    <li>
+                      <span class="text-yellow-300 font-medium"
+                        >Định dạng đầu ra</span
+                      >: Chỉ định cách thức trình bày kết quả
+                    </li>
+                    <li>
+                      <span class="text-yellow-300 font-medium">Ràng buộc</span
+                      >: Giới hạn hoặc yêu cầu đặc biệt
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prompt Tips -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-lightbulb mr-2 text-yellow-400"></i>
+                Nguyên tắc viết prompt hiệu quả
+              </div>
+
+              <div class="space-y-3">
+                <div class="tip-item">
+                  <div class="tip-icon bg-blue-500 bg-opacity-20">
+                    <i class="fas fa-check text-blue-400"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-blue-300">
+                      Cụ thể và rõ ràng
+                    </div>
+                    <p class="text-xs mt-1">
+                      Sử dụng ngôn ngữ chính xác, tránh mơ hồ. Càng chi tiết
+                      càng tốt.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="tip-item">
+                  <div class="tip-icon bg-green-500 bg-opacity-20">
+                    <i class="fas fa-check text-green-400"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-green-300">
+                      Phân chia nhiệm vụ phức tạp
+                    </div>
+                    <p class="text-xs mt-1">
+                      Chia nhỏ nhiệm vụ lớn thành các bước đơn giản hơn.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="tip-item">
+                  <div class="tip-icon bg-purple-500 bg-opacity-20">
+                    <i class="fas fa-check text-purple-400"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-purple-300">
+                      Cung cấp ví dụ
+                    </div>
+                    <p class="text-xs mt-1">
+                      Đưa ra ví dụ minh họa để AI hiểu rõ yêu cầu.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="tip-item">
+                  <div class="tip-icon bg-yellow-500 bg-opacity-20">
+                    <i class="fas fa-check text-yellow-400"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-yellow-300">
+                      Thiết lập vai trò
+                    </div>
+                    <p class="text-xs mt-1">
+                      Giao vai trò cụ thể cho AI để định hướng phong cách trả
+                      lời.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="tip-item">
+                  <div class="tip-icon bg-red-500 bg-opacity-20">
+                    <i class="fas fa-check text-red-400"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-red-300">
+                      Lặp lại và tinh chỉnh
+                    </div>
+                    <p class="text-xs mt-1">
+                      Cải thiện kết quả bằng cách điều chỉnh prompt nhiều lần.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 text-xs bg-white bg-opacity-10 rounded-lg p-3">
+                <div class="font-medium mb-2">Từ khóa hữu ích:</div>
+                <div class="flex flex-wrap">
+                  <span class="tag bg-blue-900 text-blue-300">Phân tích</span>
+                  <span class="tag bg-green-900 text-green-300">So sánh</span>
+                  <span class="tag bg-purple-900 text-purple-300"
+                    >Giải thích</span
+                  >
+                  <span class="tag bg-yellow-900 text-yellow-300">Tóm tắt</span>
+                  <span class="tag bg-red-900 text-red-300"
+                    >Bước-từng-bước</span
+                  >
+                  <span class="tag bg-indigo-900 text-indigo-300">Vai trò</span>
+                  <span class="tag bg-pink-900 text-pink-300">Ví dụ</span>
+                  <span class="tag bg-gray-700">Định dạng JSON</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right column -->
+          <div class="space-y-6">
+            <!-- Prompt Techniques -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-tools mr-2 text-blue-400"></i>
+                Các kỹ thuật Prompt Engineering
+              </div>
+
+              <div class="space-y-3">
+                <!-- Zero-shot -->
+                <div class="technique-card" style="border-left-color: #3b82f6;">
+                  <i class="fas fa-bolt technique-icon text-blue-400"></i>
+                  <div class="font-medium text-blue-300">Zero-shot</div>
+                  <p class="text-xs mt-1">
+                    Yêu cầu AI thực hiện nhiệm vụ mà không cung cấp ví dụ, hoạt
+                    động tốt với mô hình lớn.
+                  </p>
+                  <div
+                    class="prompt-example mt-2 text-xs"
+                    style="border-left-color: #3b82f6;"
+                  >
+                    <span class="text-blue-400 font-medium">Ví dụ:</span> "Phân
+                    loại câu sau theo cảm xúc: tích cực, tiêu cực hoặc trung
+                    lập: 'Tôi rất thích sản phẩm này'"
+                  </div>
+                </div>
+
+                <!-- Few-shot -->
+                <div class="technique-card" style="border-left-color: #8b5cf6;">
+                  <i class="fas fa-list technique-icon text-purple-400"></i>
+                  <div class="font-medium text-purple-300">Few-shot</div>
+                  <p class="text-xs mt-1">
+                    Cung cấp một số ví dụ để AI học cách thức thực hiện nhiệm vụ
+                    trước khi giải quyết trường hợp mới.
+                  </p>
+                  <div
+                    class="prompt-example mt-2 text-xs"
+                    style="border-left-color: #8b5cf6;"
+                  >
+                    <span class="text-purple-400 font-medium">Ví dụ:</span
+                    ><br />
+                    "Đầu vào: Thời tiết hôm nay đẹp<br />
+                    Đầu ra: Tích cực<br /><br />
+                    Đầu vào: Tôi thất vọng về dịch vụ<br />
+                    Đầu ra: Tiêu cực<br /><br />
+                    Đầu vào: Sản phẩm đã được giao<br />
+                    Đầu ra: [?]"
+                  </div>
+                </div>
+
+                <!-- Chain-of-thought -->
+                <div class="technique-card" style="border-left-color: #10b981;">
+                  <i
+                    class="fas fa-project-diagram technique-icon text-green-400"
+                  ></i>
+                  <div class="font-medium text-green-300">
+                    Chain-of-thought (Chuỗi suy nghĩ)
+                  </div>
+                  <p class="text-xs mt-1">
+                    Khuyến khích AI hiển thị quá trình suy nghĩ từng bước, đặc
+                    biệt hữu ích cho các vấn đề phức tạp như toán học, lập luận.
+                  </p>
+                  <div
+                    class="prompt-example mt-2 text-xs"
+                    style="border-left-color: #10b981;"
+                  >
+                    <span class="text-green-400 font-medium">Ví dụ:</span> "Hãy
+                    giải bài toán sau và giải thích từng bước suy nghĩ của bạn:
+                    Nếu Ana có 5 quả táo, cho Ben 2 quả và mua thêm 3 quả, Ana
+                    có bao nhiêu quả táo?"
+                  </div>
+                </div>
+
+                <!-- Role-playing -->
+                <div class="technique-card" style="border-left-color: #f59e0b;">
+                  <i
+                    class="fas fa-theater-masks technique-icon text-yellow-400"
+                  ></i>
+                  <div class="font-medium text-yellow-300">
+                    Role-playing (Đóng vai)
+                  </div>
+                  <p class="text-xs mt-1">
+                    Giao cho AI một vai trò cụ thể để điều chỉnh cách trả lời và
+                    phong cách giao tiếp.
+                  </p>
+                  <div
+                    class="prompt-example mt-2 text-xs"
+                    style="border-left-color: #f59e0b;"
+                  >
+                    <span class="text-yellow-400 font-medium">Ví dụ:</span> "Hãy
+                    đóng vai một chuyên gia marketing với 20 năm kinh nghiệm.
+                    Phân tích chiến dịch quảng cáo này và đưa ra các gợi ý cải
+                    thiện."
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prompt Example -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-code mr-2 text-green-400"></i>
+                Ví dụ prompt toàn diện
+              </div>
+
+              <div class="space-y-4">
+                <div
+                  class="bg-black bg-opacity-30 p-4 rounded-lg border border-gray-700 text-xs font-mono whitespace-pre-line"
+                >
+                  <span class="text-blue-300 font-medium"># Bối cảnh</span>
+                  Bạn là chuyên gia phân tích dữ liệu và truyền thông marketing
+                  với hơn 15 năm kinh nghiệm trong ngành hàng tiêu dùng.
+
+                  <span class="text-purple-300 font-medium"># Nhiệm vụ</span>
+                  Phân tích dữ liệu bán hàng dưới đây và tạo ra một báo cáo tóm
+                  tắt về hiệu suất của 3 chiến dịch marketing gần đây.
+
+                  <span class="text-green-300 font-medium"># Dữ liệu</span>
+                  - Chiến dịch A: 1,200 đơn hàng, chi phí 5,000 USD, ROI 2.4 -
+                  Chiến dịch B: 800 đơn hàng, chi phí 3,000 USD, ROI 3.1 - Chiến
+                  dịch C: 1,500 đơn hàng, chi phí 8,000 USD, ROI 1.8
+
+                  <span class="text-yellow-300 font-medium"
+                    ># Định dạng đầu ra</span
+                  >
+                  - Phần 1: Tóm tắt tổng quan (2-3 câu) - Phần 2: So sánh hiệu
+                  suất các chiến dịch (bảng) - Phần 3: 3 đề xuất cụ thể để cải
+                  thiện - Phần 4: Đề xuất phân bổ ngân sách cho chiến dịch tiếp
+                  theo
+
+                  <span class="text-red-300 font-medium"># Ràng buộc</span>
+                  - Sử dụng ngôn ngữ đơn giản, dễ hiểu - Đưa ra đề xuất dựa trên
+                  dữ liệu - Giải thích các thuật ngữ chuyên môn nếu cần
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="bg-white bg-opacity-10 p-3 rounded-lg">
+                    <div class="text-sm font-medium text-green-300 mb-2">
+                      Đặc điểm tốt
+                    </div>
+                    <ul class="text-xs space-y-1">
+                      <li>
+                        <i class="fas fa-check text-green-400 mr-1"></i> Định
+                        nghĩa vai trò rõ ràng
+                      </li>
+                      <li>
+                        <i class="fas fa-check text-green-400 mr-1"></i> Cung
+                        cấp dữ liệu cụ thể
+                      </li>
+                      <li>
+                        <i class="fas fa-check text-green-400 mr-1"></i> Cấu
+                        trúc đầu ra chi tiết
+                      </li>
+                      <li>
+                        <i class="fas fa-check text-green-400 mr-1"></i> Đề cập
+                        tới các ràng buộc
+                      </li>
+                      <li>
+                        <i class="fas fa-check text-green-400 mr-1"></i> Tổ chức
+                        bằng các phần rõ ràng
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="bg-white bg-opacity-10 p-3 rounded-lg">
+                    <div class="text-sm font-medium text-yellow-300 mb-2">
+                      Ứng dụng
+                    </div>
+                    <ul class="text-xs space-y-1">
+                      <li>
+                        <i class="fas fa-angle-right text-yellow-400 mr-1"></i>
+                        Báo cáo phân tích dữ liệu
+                      </li>
+                      <li>
+                        <i class="fas fa-angle-right text-yellow-400 mr-1"></i>
+                        Viết nội dung marketing
+                      </li>
+                      <li>
+                        <i class="fas fa-angle-right text-yellow-400 mr-1"></i>
+                        Tạo kế hoạch kinh doanh
+                      </li>
+                      <li>
+                        <i class="fas fa-angle-right text-yellow-400 mr-1"></i>
+                        Giải quyết vấn đề phức tạp
+                      </li>
+                      <li>
+                        <i class="fas fa-angle-right text-yellow-400 mr-1"></i>
+                        Viết tài liệu chuyên môn
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom note -->
+        <div
+          class="mt-auto flex items-center justify-center text-sm opacity-80"
+        >
+          <div class="mr-2">
+            <i class="fas fa-quote-left text-blue-400 mr-1"></i>
+            <span class="font-semibold">Khẩu hiệu:</span>
+          </div>
+          <span
+            >"<span class="highlight">Prompt tốt</span> giống như một
+            <span class="highlight">đầu bếp giỏi</span> - không chỉ đưa ra hướng
+            dẫn, mà còn biết cách
+            <span class="highlight">khai thác tối đa tiềm năng</span> của nguyên
+            liệu"</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="slide-navigation">
+      <a href="page7.html" class="slide-navigation__btn">Prev</a>
+      <a href="page9.html" class="slide-navigation__btn">Next</a>
+    </div>
+  </body>
+</html>

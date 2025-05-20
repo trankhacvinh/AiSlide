@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generative AI và LLMs</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/style.css">
+    <style>
+      body {
+          margin: 0;
+          padding: 0;
+          font-family: 'Montserrat', sans-serif;
+          overflow: auto;
+      }
+      .slide {
+          width: 1280px;
+          min-height: 720px;
+          position: relative;
+          background: linear-gradient(135deg, #0c1d3d, #1a3a63, #2c5364);
+          color: white;
+          overflow: hidden;
+      }
+      .gradient-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle at top left, rgba(138, 43, 226, 0.2), rgba(8, 34, 104, 0) 70%);
+      }
+      .grid-pattern {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image:
+              linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-size: 20px 20px;
+          z-index: 0;
+      }
+      .title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          background: linear-gradient(90deg, #ffffff, #e0e0e0);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 1.5rem;
+          position: relative;
+      }
+      .title::after {
+          content: "";
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 100px;
+          height: 4px;
+          background: linear-gradient(90deg, #9333ea, #c084fc);
+          border-radius: 2px;
+      }
+      .gen-ai-highlight {
+          position: relative;
+      }
+      .card {
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(5px);
+          border-radius: 15px;
+          padding: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          height: 100%;
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+      }
+      .card-title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin-bottom: 12px;
+          color: white;
+          display: flex;
+          align-items: center;
+      }
+      .model-pill {
+          display: inline-block;
+          padding: 6px 12px;
+          border-radius: 20px;
+          font-size: 0.9rem;
+          margin-right: 8px;
+          margin-bottom: 8px;
+          border-left: 3px solid;
+          background: rgba(255, 255, 255, 0.1);
+          transition: all 0.2s;
+      }
+      .model-pill:hover {
+          transform: scale(1.05);
+          background: rgba(255, 255, 255, 0.15);
+      }
+      .gpt-pill {
+          border-color: #10b981;
+      }
+      .claude-pill {
+          border-color: #6366f1;
+      }
+      .llama-pill {
+          border-color: #f59e0b;
+      }
+      .bard-pill {
+          border-color: #ec4899;
+      }
+      .mistral-pill {
+          border-color: #3b82f6;
+      }
+      .gemini-pill {
+          border-color: #8b5cf6;
+      }
+      .feature-list li {
+          margin-bottom: 8px;
+          display: flex;
+          align-items: flex-start;
+      }
+      .feature-list li i {
+          color: #a855f7;
+          margin-right: 10px;
+          margin-top: 3px;
+      }
+      .comparison-row {
+          display: flex;
+          margin-bottom: 8px;
+          align-items: center;
+      }
+      .comparison-label {
+          width: 30%;
+          font-weight: 600;
+          font-size: 0.9rem;
+      }
+      .comparison-traditional, .comparison-generative {
+          width: 35%;
+          padding: 8px;
+          border-radius: 8px;
+          font-size: 0.85rem;
+      }
+      .comparison-traditional {
+          background: rgba(59, 130, 246, 0.2);
+          border-left: 3px solid #3b82f6;
+      }
+      .comparison-generative {
+          background: rgba(168, 85, 247, 0.2);
+          border-left: 3px solid #a855f7;
+      }
+      .capability-item {
+          display: flex;
+          align-items: center;
+          margin-bottom: 8px;
+      }
+      .capability-icon {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.1);
+          margin-right: 10px;
+          color: #a855f7;
+      }
+      .floating-element {
+          position: absolute;
+          z-index: 0;
+          opacity: 0.1;
+          pointer-events: none;
+      }
+      .floating-prompt {
+          top: 20px;
+          right: 50px;
+          font-size: 2.5rem;
+      }
+      .floating-output {
+          bottom: 80px;
+          right: 20px;
+          font-size: 3rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide flex flex-col items-start justify-start">
+      <!-- Background elements -->
+      <div class="grid-pattern"></div>
+      <div class="gradient-overlay"></div>
+      <i class="fas fa-robot floating-element floating-prompt"></i>
+      <i class="fas fa-brain floating-element floating-output"></i>
+
+      <!-- Main content -->
+      <div class="z-10 p-16 w-full h-full flex flex-col">
+        <h1 class="title">GENERATIVE AI VÀ LLMs</h1>
+
+        <!-- Main content grid -->
+        <div class="grid grid-cols-2 gap-6 mt-2 mb-2">
+          <!-- Left Column -->
+          <div class="space-y-6">
+            <!-- What is Generative AI -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-magic mr-2 text-purple-400"></i>
+                Generative AI là gì?
+              </div>
+              <p class="text-sm opacity-80 mb-3">
+                Trí tuệ nhân tạo có khả năng
+                <span class="font-semibold text-purple-300"
+                  >tạo ra nội dung mới</span
+                >
+                (văn bản, hình ảnh, âm thanh, video...) dựa trên dữ liệu huấn
+                luyện thay vì chỉ phân tích hoặc phân loại dữ liệu có sẵn.
+              </p>
+
+              <div class="mt-4">
+                <div
+                  class="text-xs font-semibold uppercase tracking-wide mb-2 text-purple-300"
+                >
+                  Các dạng Generative AI phổ biến
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div class="bg-white bg-opacity-10 rounded-lg p-3">
+                    <div class="flex items-center">
+                      <i class="fas fa-comment-alt mr-2 text-purple-300"></i>
+                      <span class="font-medium">Text Generation</span>
+                    </div>
+                    <p class="text-xs mt-1 opacity-80">
+                      LLMs: GPT-4, Claude, LLaMA
+                    </p>
+                  </div>
+                  <div class="bg-white bg-opacity-10 rounded-lg p-3">
+                    <div class="flex items-center">
+                      <i class="fas fa-image mr-2 text-purple-300"></i>
+                      <span class="font-medium">Image Generation</span>
+                    </div>
+                    <p class="text-xs mt-1 opacity-80">
+                      DALL-E, Midjourney, Stable Diffusion
+                    </p>
+                  </div>
+                  <div class="bg-white bg-opacity-10 rounded-lg p-3">
+                    <div class="flex items-center">
+                      <i class="fas fa-music mr-2 text-purple-300"></i>
+                      <span class="font-medium">Audio Generation</span>
+                    </div>
+                    <p class="text-xs mt-1 opacity-80">
+                      MusicLM, DALL-E 3, AudioGen
+                    </p>
+                  </div>
+                  <div class="bg-white bg-opacity-10 rounded-lg p-3">
+                    <div class="flex items-center">
+                      <i class="fas fa-film mr-2 text-purple-300"></i>
+                      <span class="font-medium">Video Generation</span>
+                    </div>
+                    <p class="text-xs mt-1 opacity-80">
+                      Sora, Runway Gen-2, Pika Labs
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- LLM Models -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-project-diagram mr-2 text-purple-400"></i>
+                Các mô hình LLM phổ biến
+              </div>
+              <p class="text-xs opacity-80 mb-3">
+                Large Language Models (LLMs) - Mô hình ngôn ngữ lớn được huấn
+                luyện trên lượng dữ liệu văn bản khổng lồ
+              </p>
+
+              <div class="flex flex-wrap mt-2">
+                <div class="model-pill gpt-pill">
+                  <div class="font-semibold">GPT-4/4o</div>
+                  <div class="text-xs opacity-75">OpenAI</div>
+                </div>
+                <div class="model-pill claude-pill">
+                  <div class="font-semibold">Claude 3</div>
+                  <div class="text-xs opacity-75">Anthropic</div>
+                </div>
+                <div class="model-pill llama-pill">
+                  <div class="font-semibold">LLaMA 3</div>
+                  <div class="text-xs opacity-75">Meta</div>
+                </div>
+                <div class="model-pill gemini-pill">
+                  <div class="font-semibold">Gemini</div>
+                  <div class="text-xs opacity-75">Google</div>
+                </div>
+                <div class="model-pill mistral-pill">
+                  <div class="font-semibold">Mixtral</div>
+                  <div class="text-xs opacity-75">Mistral AI</div>
+                </div>
+                <div class="model-pill bard-pill">
+                  <div class="font-semibold">Command</div>
+                  <div class="text-xs opacity-75">Cohere</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="space-y-6">
+            <!-- Traditional vs Generative AI -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-exchange-alt mr-2 text-blue-400"></i>
+                AI Truyền thống vs Generative AI
+              </div>
+
+              <div class="mt-1">
+                <div
+                  class="flex border-b border-white border-opacity-20 pb-2 mb-3"
+                >
+                  <div class="w-1/3 font-semibold"></div>
+                  <div class="w-1/3 text-center text-sm">
+                    <div
+                      class="bg-blue-500 bg-opacity-20 rounded-md py-1 px-2 inline-block"
+                    >
+                      <i class="fas fa-cogs mr-1"></i> AI Truyền thống
+                    </div>
+                  </div>
+                  <div class="w-1/3 text-center text-sm">
+                    <div
+                      class="bg-purple-500 bg-opacity-20 rounded-md py-1 px-2 inline-block"
+                    >
+                      <i class="fas fa-magic mr-1"></i> Generative AI
+                    </div>
+                  </div>
+                </div>
+
+                <div class="comparison-row">
+                  <div class="comparison-label">Đầu ra</div>
+                  <div class="comparison-traditional">
+                    Dự đoán, phân loại, phân tích dựa trên dữ liệu
+                  </div>
+                  <div class="comparison-generative">
+                    Tạo ra nội dung mới, sáng tạo
+                  </div>
+                </div>
+
+                <div class="comparison-row">
+                  <div class="comparison-label">Kiến trúc</div>
+                  <div class="comparison-traditional">
+                    Mô hình đơn giản, mạng neural cơ bản
+                  </div>
+                  <div class="comparison-generative">
+                    Mô hình phức tạp, Transformer, Attention
+                  </div>
+                </div>
+
+                <div class="comparison-row">
+                  <div class="comparison-label">Dữ liệu</div>
+                  <div class="comparison-traditional">
+                    Tập dữ liệu có cấu trúc, có nhãn
+                  </div>
+                  <div class="comparison-generative">
+                    Dữ liệu khổng lồ, đa dạng, không nhãn
+                  </div>
+                </div>
+
+                <div class="comparison-row">
+                  <div class="comparison-label">Tương tác</div>
+                  <div class="comparison-traditional">
+                    Phản hồi theo kịch bản cố định
+                  </div>
+                  <div class="comparison-generative">
+                    Đối thoại linh hoạt, hiểu ngữ cảnh
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- LLM Capabilities -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-toolbox mr-2 text-green-400"></i>
+                Khả năng của LLM hiện đại
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 mt-2">
+                <div class="capability-item">
+                  <div class="capability-icon"><i class="fas fa-pen"></i></div>
+                  <div>
+                    <div class="text-sm font-medium">Sáng tạo nội dung</div>
+                    <div class="text-xs opacity-75">
+                      Bài viết, kịch bản, thơ, email
+                    </div>
+                  </div>
+                </div>
+
+                <div class="capability-item">
+                  <div class="capability-icon"><i class="fas fa-code"></i></div>
+                  <div>
+                    <div class="text-sm font-medium">Hỗ trợ lập trình</div>
+                    <div class="text-xs opacity-75">
+                      Viết code, debug, giải thích
+                    </div>
+                  </div>
+                </div>
+
+                <div class="capability-item">
+                  <div class="capability-icon">
+                    <i class="fas fa-language"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium">Dịch đa ngôn ngữ</div>
+                    <div class="text-xs opacity-75">
+                      Dịch và hiểu >100 ngôn ngữ
+                    </div>
+                  </div>
+                </div>
+
+                <div class="capability-item">
+                  <div class="capability-icon">
+                    <i class="fas fa-search"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium">Trả lời câu hỏi</div>
+                    <div class="text-xs opacity-75">
+                      Thông tin, kiến thức chuyên sâu
+                    </div>
+                  </div>
+                </div>
+
+                <div class="capability-item">
+                  <div class="capability-icon">
+                    <i class="fas fa-file-alt"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium">Tóm tắt văn bản</div>
+                    <div class="text-xs opacity-75">Rút gọn tài liệu dài</div>
+                  </div>
+                </div>
+
+                <div class="capability-item">
+                  <div class="capability-icon">
+                    <i class="fas fa-brain"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium">Suy luận và phân tích</div>
+                    <div class="text-xs opacity-75">
+                      Đánh giá, đề xuất, giải quyết vấn đề
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Limitations -->
+              <div
+                class="mt-4 bg-red-500 bg-opacity-10 p-3 rounded-lg border-l-2 border-red-500"
+              >
+                <div class="text-sm font-semibold mb-1 flex items-center">
+                  <i class="fas fa-exclamation-triangle mr-2 text-red-400"></i>
+                  Hạn chế hiện tại
+                </div>
+                <ul class="text-xs list-disc pl-5 space-y-1 opacity-80">
+                  <li>Ảo giác (hallucination) - tạo thông tin sai lệch</li>
+                  <li>Thiếu kiến thức cập nhật sau ngày huấn luyện</li>
+                  <li>
+                    Khả năng toán học và suy luận logic phức tạp còn hạn chế
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Note -->
+        <div class="mt-auto flex items-center text-sm opacity-70">
+          <div class="mr-2">
+            <i class="fas fa-lightbulb text-yellow-400 mr-1"></i>
+            <span class="font-semibold">Công nghệ nổi bật:</span>
+          </div>
+          <span
+            >Transformer Architecture (2017) → Encoder-Decoder → Attention
+            Mechanism → Self-Attention → RLHF (Reinforcement Learning from Human
+            Feedback)</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="slide-navigation">
+      <a href="page3.html" class="slide-navigation__btn">Prev</a>
+      <a href="page5.html" class="slide-navigation__btn">Next</a>
+    </div>
+  </body>
+</html>

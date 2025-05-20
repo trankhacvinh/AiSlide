@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatbot và ChatGPT</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/style.css">
+    <style>
+      body {
+          margin: 0;
+          padding: 0;
+          font-family: 'Montserrat', sans-serif;
+          overflow: auto;
+      }
+      .slide {
+          width: 1280px;
+          min-height: 720px;
+          position: relative;
+          background: linear-gradient(135deg, #0c1d3d, #1a3a63, #2c5364);
+          color: white;
+          overflow: hidden;
+      }
+      .gradient-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.2), rgba(8, 34, 104, 0) 70%);
+      }
+      .grid-pattern {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image:
+              linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-size: 20px 20px;
+          z-index: 0;
+      }
+      .title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          background: linear-gradient(90deg, #ffffff, #e0e0e0);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 1.5rem;
+          position: relative;
+      }
+      .title::after {
+          content: "";
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 100px;
+          height: 4px;
+          background: linear-gradient(90deg, #3b82f6, #60a5fa);
+          border-radius: 2px;
+      }
+      .card {
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(5px);
+          border-radius: 15px;
+          padding: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          height: 100%;
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+      }
+      .card-title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin-bottom: 12px;
+          color: white;
+          display: flex;
+          align-items: center;
+      }
+      .feature-card {
+          background: rgba(255, 255, 255, 0.08);
+          border-radius: 12px;
+          padding: 15px;
+          transition: all 0.3s;
+          border-left: 3px solid transparent;
+          height: 100%;
+      }
+      .feature-card:hover {
+          transform: translateY(-3px);
+          background: rgba(255, 255, 255, 0.12);
+      }
+      .floating-element {
+          position: absolute;
+          z-index: 0;
+          opacity: 0.1;
+          pointer-events: none;
+      }
+      .chat-bubble {
+          position: relative;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 15px;
+          padding: 12px;
+          margin-bottom: 10px;
+          max-width: 80%;
+      }
+      .chat-user {
+          border-top-left-radius: 2px;
+          margin-left: auto;
+          background: rgba(59, 130, 246, 0.2);
+          border-left: 2px solid #3b82f6;
+      }
+      .chat-bot {
+          border-top-right-radius: 2px;
+          margin-right: auto;
+          background: rgba(16, 185, 129, 0.2);
+          border-right: 2px solid #10b981;
+      }
+      .risk-item {
+          display: flex;
+          align-items: flex-start;
+          padding: 10px;
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.05);
+          margin-bottom: 8px;
+          border-left: 3px solid;
+      }
+      .risk-icon {
+          font-size: 1.2rem;
+          margin-right: 10px;
+          margin-top: 2px;
+      }
+      .floating-chat {
+          top: 50px;
+          right: 50px;
+          font-size: 6rem;
+          transform: rotate(5deg);
+      }
+      .floating-code {
+          bottom: 70px;
+          left: 50px;
+          font-size: 5rem;
+      }
+      .chatbot-type {
+          padding: 8px;
+          border-radius: 8px;
+          margin-right: 8px;
+          font-size: 0.85rem;
+          font-weight: 500;
+          display: inline-flex;
+          align-items: center;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .progress-bar {
+          height: 6px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 3px;
+          overflow: hidden;
+          margin-top: 4px;
+          margin-bottom: 12px;
+      }
+      .progress-fill {
+          height: 100%;
+          border-radius: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide flex flex-col">
+      <!-- Background elements -->
+      <div class="grid-pattern"></div>
+      <div class="gradient-overlay"></div>
+      <i class="fas fa-comment-dots floating-element floating-chat"></i>
+      <i class="fas fa-robot floating-element floating-code"></i>
+
+      <!-- Main content -->
+      <div class="z-10 p-16 w-full h-full flex flex-col">
+        <h1 class="title">CHATBOT VÀ CHATGPT</h1>
+
+        <div class="grid grid-cols-2 gap-6 flex-grow">
+          <!-- Left column -->
+          <div class="space-y-6">
+            <!-- Chatbot types section -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-robot mr-2 text-blue-400"></i>
+                Phân loại Chatbot
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <!-- Rule-based Chatbots -->
+                <div class="feature-card" style="border-left-color: #3b82f6;">
+                  <div class="text-sm font-semibold mb-2 text-blue-300">
+                    Chatbot luật cứng
+                  </div>
+                  <ul class="text-xs space-y-2">
+                    <li>
+                      <i class="fas fa-check-circle text-blue-400 mr-1"></i>
+                      Hoạt động theo kịch bản định sẵn
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-blue-400 mr-1"></i>
+                      Phản hồi dựa trên từ khóa
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-blue-400 mr-1"></i> Ít
+                      linh hoạt, giới hạn
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-blue-400 mr-1"></i> Chi
+                      phí thấp, triển khai dễ
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-blue-400 mr-1"></i> Phù
+                      hợp cho tác vụ đơn giản
+                    </li>
+                  </ul>
+                  <div class="mt-3 text-xs">
+                    <span class="font-medium">Ví dụ:</span> Chatbot CSKH cơ bản
+                  </div>
+                </div>
+
+                <!-- AI-based Chatbots -->
+                <div class="feature-card" style="border-left-color: #8b5cf6;">
+                  <div class="text-sm font-semibold mb-2 text-purple-300">
+                    Chatbot dựa trên AI
+                  </div>
+                  <ul class="text-xs space-y-2">
+                    <li>
+                      <i class="fas fa-check-circle text-purple-400 mr-1"></i>
+                      Hiểu ngôn ngữ tự nhiên (NLU)
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-purple-400 mr-1"></i>
+                      Học từ tương tác, cải thiện liên tục
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-purple-400 mr-1"></i>
+                      Xử lý được nhiều ngữ cảnh
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-purple-400 mr-1"></i>
+                      Tạo phản hồi đa dạng, tự nhiên
+                    </li>
+                    <li>
+                      <i class="fas fa-check-circle text-purple-400 mr-1"></i>
+                      Tích hợp được nhiều nguồn dữ liệu
+                    </li>
+                  </ul>
+                  <div class="mt-3 text-xs">
+                    <span class="font-medium">Ví dụ:</span> ChatGPT, Google
+                    Bard, Claude
+                  </div>
+                </div>
+              </div>
+
+              <!-- ChatGPT model comparison -->
+              <div class="mt-5">
+                <div class="text-sm font-semibold mb-3 text-indigo-300">
+                  Các mô hình ChatGPT
+                </div>
+                <div class="text-xs space-y-3">
+                  <div>
+                    <div class="flex justify-between items-center">
+                      <span class="font-medium">GPT-3.5</span>
+                      <span class="text-blue-300 text-xs"
+                        >Phổ biến, miễn phí</span
+                      >
+                    </div>
+                    <div class="progress-bar">
+                      <div
+                        class="progress-fill bg-blue-500"
+                        style="width: 75%"
+                      ></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between items-center">
+                      <span class="font-medium">GPT-4</span>
+                      <span class="text-green-300 text-xs"
+                        >Nâng cao, trả phí</span
+                      >
+                    </div>
+                    <div class="progress-bar">
+                      <div
+                        class="progress-fill bg-green-500"
+                        style="width: 95%"
+                      ></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between items-center">
+                      <span class="font-medium">GPT-4o</span>
+                      <span class="text-purple-300 text-xs"
+                        >Multimodal, trả phí</span
+                      >
+                    </div>
+                    <div class="progress-bar">
+                      <div
+                        class="progress-fill bg-purple-500"
+                        style="width: 98%"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chat example -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-comments mr-2 text-green-400"></i>
+                Ví dụ tương tác với ChatGPT
+              </div>
+
+              <div class="space-y-3">
+                <div class="chat-bubble chat-user">
+                  <div class="text-xs font-semibold text-blue-300">
+                    Người dùng:
+                  </div>
+                  <div class="text-sm">
+                    Tóm tắt giúp tôi bài viết về biến đổi khí hậu. Trình bày
+                    trong 3 điểm chính.
+                  </div>
+                </div>
+
+                <div class="chat-bubble chat-bot">
+                  <div class="text-xs font-semibold text-green-300">
+                    ChatGPT:
+                  </div>
+                  <div class="text-sm">
+                    <p class="mb-2">
+                      <strong>1. Nguyên nhân:</strong> Chủ yếu do con người thải
+                      quá nhiều khí nhà kính từ đốt nhiên liệu hóa thạch, phá
+                      rừng và hoạt động công nghiệp, làm tăng nhiệt độ Trái Đất.
+                    </p>
+                    <p class="mb-2">
+                      <strong>2. Tác động:</strong> Gây ra thời tiết cực đoan,
+                      nước biển dâng, mất đa dạng sinh học, đe dọa an ninh lương
+                      thực và sức khỏe con người.
+                    </p>
+                    <p>
+                      <strong>3. Giải pháp:</strong> Cần chuyển đổi sang năng
+                      lượng tái tạo, cải thiện hiệu quả năng lượng, thay đổi
+                      chính sách và lối sống bền vững, đồng thời hợp tác quốc tế
+                      để giảm phát thải.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 text-xs bg-white bg-opacity-10 rounded p-3">
+                <div class="font-semibold mb-2">
+                  Đặc điểm phản hồi của ChatGPT:
+                </div>
+                <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+                  <div>
+                    <i class="fas fa-check text-green-400 mr-1"></i> Cấu trúc và
+                    ngắn gọn
+                  </div>
+                  <div>
+                    <i class="fas fa-check text-green-400 mr-1"></i> Dựa trên
+                    kiến thức đã học
+                  </div>
+                  <div>
+                    <i class="fas fa-check text-green-400 mr-1"></i> Tự nhiên và
+                    liền mạch
+                  </div>
+                  <div>
+                    <i class="fas fa-check text-green-400 mr-1"></i> Có thể điều
+                    chỉnh theo yêu cầu
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right column -->
+          <div class="space-y-6">
+            <!-- Strengths section -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-award mr-2 text-yellow-400"></i>
+                Điểm mạnh của ChatGPT
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div class="feature-card" style="border-left-color: #f59e0b;">
+                  <div class="text-sm font-semibold mb-2 text-yellow-300">
+                    Khả năng ngôn ngữ
+                  </div>
+                  <ul class="text-xs space-y-2">
+                    <li>
+                      <i class="fas fa-star text-yellow-400 mr-1"></i> Xử lý
+                      nhiều ngôn ngữ
+                    </li>
+                    <li>
+                      <i class="fas fa-star text-yellow-400 mr-1"></i> Hiểu ngữ
+                      cảnh phức tạp
+                    </li>
+                    <li>
+                      <i class="fas fa-star text-yellow-400 mr-1"></i> Tạo văn
+                      bản chất lượng cao
+                    </li>
+                    <li>
+                      <i class="fas fa-star text-yellow-400 mr-1"></i> Khả năng
+                      tóm tắt, phân tích
+                    </li>
+                    <li>
+                      <i class="fas fa-star text-yellow-400 mr-1"></i> Dịch
+                      thuật đa ngôn ngữ
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="feature-card" style="border-left-color: #10b981;">
+                  <div class="text-sm font-semibold mb-2 text-green-300">
+                    Tính hữu dụng
+                  </div>
+                  <ul class="text-xs space-y-2">
+                    <li>
+                      <i class="fas fa-star text-green-400 mr-1"></i> Trợ giúp
+                      24/7
+                    </li>
+                    <li>
+                      <i class="fas fa-star text-green-400 mr-1"></i> Kiến thức
+                      tổng hợp đa lĩnh vực
+                    </li>
+                    <li>
+                      <i class="fas fa-star text-green-400 mr-1"></i> Phản hồi
+                      nhanh, nhất quán
+                    </li>
+                    <li>
+                      <i class="fas fa-star text-green-400 mr-1"></i> Tích hợp
+                      được nhiều nền tảng
+                    </li>
+                    <li>
+                      <i class="fas fa-star text-green-400 mr-1"></i> Phù hợp
+                      cho nhiều đối tượng
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <div class="text-sm font-semibold mb-2">Ứng dụng thực tế</div>
+                <div class="grid grid-cols-3 gap-2">
+                  <div class="chatbot-type bg-blue-900 bg-opacity-30">
+                    <i class="fas fa-headset text-blue-400 mr-1"></i> CSKH tự
+                    động
+                  </div>
+                  <div class="chatbot-type bg-green-900 bg-opacity-30">
+                    <i class="fas fa-pen text-green-400 mr-1"></i> Sáng tạo nội
+                    dung
+                  </div>
+                  <div class="chatbot-type bg-purple-900 bg-opacity-30">
+                    <i class="fas fa-graduation-cap text-purple-400 mr-1"></i>
+                    Trợ giảng
+                  </div>
+                  <div class="chatbot-type bg-pink-900 bg-opacity-30">
+                    <i class="fas fa-code text-pink-400 mr-1"></i> Hỗ trợ lập
+                    trình
+                  </div>
+                  <div class="chatbot-type bg-yellow-900 bg-opacity-30">
+                    <i class="fas fa-brain text-yellow-400 mr-1"></i> Nghiên cứu
+                  </div>
+                  <div class="chatbot-type bg-red-900 bg-opacity-30">
+                    <i class="fas fa-chart-line text-red-400 mr-1"></i> Phân
+                    tích dữ liệu
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Risks section -->
+            <div class="card">
+              <div class="card-title">
+                <i class="fas fa-exclamation-triangle mr-2 text-red-400"></i>
+                Rủi ro và thách thức
+              </div>
+
+              <div class="space-y-3">
+                <!-- Hallucination -->
+                <div class="risk-item" style="border-left-color: #ef4444;">
+                  <div class="risk-icon text-red-400">
+                    <i class="fas fa-ghost"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium text-red-300 mb-1">
+                      Ảo giác (Hallucination)
+                    </div>
+                    <div class="text-xs">
+                      Tạo ra thông tin sai lệch nhưng nghe có vẻ đúng, bịa đặt
+                      dữ liệu, tài liệu hoặc trích dẫn không tồn tại.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bias -->
+                <div class="risk-item" style="border-left-color: #f59e0b;">
+                  <div class="risk-icon text-yellow-400">
+                    <i class="fas fa-balance-scale"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium text-yellow-300 mb-1">
+                      Định kiến (Bias)
+                    </div>
+                    <div class="text-xs">
+                      Phản ánh định kiến trong dữ liệu huấn luyện, nghiêng về
+                      quan điểm nhất định, thiên vị văn hóa hoặc chính trị.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Privacy & Security -->
+                <div class="risk-item" style="border-left-color: #3b82f6;">
+                  <div class="risk-icon text-blue-400">
+                    <i class="fas fa-shield-alt"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium text-blue-300 mb-1">
+                      Bảo mật & Quyền riêng tư
+                    </div>
+                    <div class="text-xs">
+                      Dữ liệu người dùng có thể được lưu trữ, nguy cơ rò rỉ
+                      thông tin nhạy cảm, tạo điều kiện cho lừa đảo tinh vi hơn.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Overreliance -->
+                <div class="risk-item" style="border-left-color: #8b5cf6;">
+                  <div class="risk-icon text-purple-400">
+                    <i class="fas fa-link"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium text-purple-300 mb-1">
+                      Phụ thuộc quá mức
+                    </div>
+                    <div class="text-xs">
+                      Giảm tư duy phản biện, lệ thuộc vào công nghệ, thiếu tư
+                      duy sáng tạo độc lập.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 text-xs bg-white bg-opacity-10 rounded p-3">
+                <div class="font-semibold mb-2 text-center">
+                  Biện pháp giảm thiểu rủi ro
+                </div>
+                <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+                  <div>
+                    <i class="fas fa-check-circle text-green-400 mr-1"></i> Kiểm
+                    tra chéo thông tin từ AI
+                  </div>
+                  <div>
+                    <i class="fas fa-check-circle text-green-400 mr-1"></i> Đào
+                    tạo nhận thức về AI
+                  </div>
+                  <div>
+                    <i class="fas fa-check-circle text-green-400 mr-1"></i> Sử
+                    dụng AI có nguồn tin cậy
+                  </div>
+                  <div>
+                    <i class="fas fa-check-circle text-green-400 mr-1"></i> Bảo
+                    vệ dữ liệu nhạy cảm
+                  </div>
+                  <div>
+                    <i class="fas fa-check-circle text-green-400 mr-1"></i>
+                    Thiết lập ranh giới sử dụng
+                  </div>
+                  <div>
+                    <i class="fas fa-check-circle text-green-400 mr-1"></i> Cập
+                    nhật chính sách liên tục
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom note -->
+        <div class="mt-auto flex items-center text-sm opacity-80">
+          <div class="mr-2">
+            <i class="fas fa-lightbulb text-yellow-400 mr-1"></i>
+            <span class="font-semibold">Lưu ý quan trọng:</span>
+          </div>
+          <span
+            >ChatGPT là công cụ mạnh mẽ nhưng cần sử dụng có trách nhiệm, đặc
+            biệt trong môi trường doanh nghiệp và xử lý thông tin nhạy cảm</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-navigation">
+      <a href="page6.html" class="slide-navigation__btn">Prev</a>
+      <a href="page8.html" class="slide-navigation__btn">Next</a>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          // Animation for progress bars
+          const bars = document.querySelectorAll('.progress-fill');
+          setTimeout(() => {
+              bars.forEach(bar => {
+                  const width = bar.style.width;
+                  bar.style.width = '0';
+                  setTimeout(() => {
+                      bar.style.width = width;
+                  }, 300);
+              });
+          }, 500);
+      });
+    </script>
+  </body>
+</html>

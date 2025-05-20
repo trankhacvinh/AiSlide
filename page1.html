@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nội Dung - Tổng quan về AI và Ứng dụng trong Doanh nghiệp</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/style.css">
+    <style>
+      body {
+          margin: 0;
+          padding: 0;
+          font-family: 'Montserrat', sans-serif;
+          overflow: auto;
+      }
+      .slide {
+          width: 1280px;
+          min-height: 720px;
+          position: relative;
+          background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+          color: white;
+          overflow: hidden;
+      }
+      .gradient-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle at bottom right, rgba(64, 84, 178, 0.8), rgba(8, 34, 104, 0) 70%);
+      }
+      .grid-pattern {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image:
+              linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-size: 20px 20px;
+          z-index: 0;
+      }
+      .title {
+          font-size: 2.8rem;
+          font-weight: 700;
+          background: linear-gradient(90deg, #ffffff, #e0e0e0);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 2rem;
+          position: relative;
+      }
+      .title::after {
+          content: "";
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 100px;
+          height: 4px;
+          background: linear-gradient(90deg, #4e54c8, #8f94fb);
+          border-radius: 2px;
+      }
+      .toc-item {
+          display: flex;
+          align-items: center;
+          margin-bottom: 14px;
+          opacity: 0.9;
+          transition: all 0.3s ease;
+      }
+      .toc-item:hover {
+          opacity: 1;
+          transform: translateX(10px);
+      }
+      .toc-number {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          background: rgba(255, 255, 255, 0.15);
+          border-radius: 50%;
+          margin-right: 15px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          color: #8f94fb;
+      }
+      .toc-icon {
+          margin-right: 15px;
+          width: 24px;
+          text-align: center;
+          color: #8f94fb;
+      }
+      .toc-text {
+          font-size: 1.1rem;
+          font-weight: 500;
+      }
+      .toc-columns {
+          display: flex;
+          gap: 60px;
+      }
+      .toc-column {
+          flex: 1;
+      }
+      .side-decoration {
+          position: absolute;
+          top: 50%;
+          right: 40px;
+          transform: translateY(-50%);
+          opacity: 0.07;
+          font-size: 300px;
+          z-index: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide flex items-start justify-start">
+      <!-- Background elements -->
+      <div class="grid-pattern"></div>
+      <div class="gradient-overlay"></div>
+
+      <!-- Side Decoration -->
+      <i class="fas fa-project-diagram side-decoration"></i>
+
+      <!-- Main content -->
+      <div class="z-10 p-16 w-full">
+        <h1 class="title">NỘI DUNG</h1>
+
+        <div class="toc-columns mt-10">
+          <div class="toc-column">
+            <div class="toc-item">
+              <div class="toc-number">01</div>
+              <i class="fas fa-brain toc-icon"></i>
+              <div class="toc-text">AI và các loại AI (ANI, AGI, ASI)</div>
+            </div>
+
+            <div class="toc-item">
+              <div class="toc-number">02</div>
+              <i class="fas fa-code-branch toc-icon"></i>
+              <div class="toc-text">Các lĩnh vực của AI (ML, DL, NLP, CV)</div>
+            </div>
+
+            <div class="toc-item">
+              <div class="toc-number">03</div>
+              <i class="fas fa-robot toc-icon"></i>
+              <div class="toc-text">Generative AI và LLMs</div>
+            </div>
+
+            <div class="toc-item">
+              <div class="toc-number">04</div>
+              <i class="fas fa-cogs toc-icon"></i>
+              <div class="toc-text">Cách hoạt động của LLM</div>
+            </div>
+
+            <div class="toc-item">
+              <div class="toc-number">05</div>
+              <i class="fas fa-edit toc-icon"></i>
+              <div class="toc-text">Ứng dụng trong viết, dịch, sáng tạo</div>
+            </div>
+
+            <div class="toc-item">
+              <div class="toc-number">06</div>
+              <i class="fas fa-comment-dots toc-icon"></i>
+              <div class="toc-text">Chatbot và ChatGPT</div>
+            </div>
+          </div>
+
+          <div class="toc-column">
+            <div class="toc-item">
+              <div class="toc-number">07</div>
+              <i class="fas fa-keyboard toc-icon"></i>
+              <div class="toc-text">Prompt Engineering</div>
+            </div>
+
+            <div class="toc-item">
+              <div class="toc-number">08</div>
+              <i class="fas fa-cog toc-icon"></i>
+              <div class="toc-text">Tự động hóa với n8n & công cụ no-code</div>
+            </div>
+
+            <div class="toc-item">
+              <div class="toc-number">09</div>
+              <i class="fas fa-building toc-icon"></i>
+              <div class="toc-text">Ứng dụng AI theo phòng ban</div>
+            </div>
+
+            <div class="toc-item">
+              <div class="toc-number">10</div>
+              <i class="fas fa-graduation-cap toc-icon"></i>
+              <div class="toc-text">RAG, Finetuning, AI Agent</div>
+            </div>
+
+            <div class="toc-item">
+              <div class="toc-number">11</div>
+              <i class="fas fa-shield-alt toc-icon"></i>
+              <div class="toc-text">
+                Đạo đức, bảo mật và chiến lược triển khai
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="absolute bottom-10 left-16 text-sm opacity-70 flex items-center"
+        >
+          <i class="fas fa-lightbulb mr-2"></i>
+          <span
+            >Trải nghiệm tổng quan về AI từ cơ bản đến ứng dụng thực tế</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="slide-navigation">
+      <a href="index.html" class="slide-navigation__btn">Prev</a>
+      <a href="page2.html" class="slide-navigation__btn">Next</a>
+    </div>
+  </body>
+</html>
