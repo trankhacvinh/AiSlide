@@ -26,11 +26,12 @@
       }
       .slide {
           width: 1280px;
-          min-height: 720px;
+          height: 720px; /* Changed min-height to height */
           position: relative;
           background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
           color: white;
           overflow: hidden;
+          overflow-y: auto; /* Added overflow-y */
       }
       .gradient-overlay {
           position: absolute;
